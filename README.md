@@ -1,4 +1,4 @@
-# TutorialKit Starter
+# TutorialKit.rb Starter
 
 👋 Welcome to TutorialKit!
 

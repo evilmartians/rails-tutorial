@@ -8,6 +8,10 @@
     "build": "vite build",
     "preview": "vite preview"
   },
+  "dependencies": {
+    "@ruby/wasm-wasi": "^2.7.1",
+    "@ruby/3.4-wasm-wasi": "^2.7.1"
+  },
   "devDependencies": {
     "vite": "^5.2.0"
   }
