@@ -1,0 +1,45 @@
+{
+  "name": "@tutorialkit/theme",
+  "version": "1.5.0",
+  "description": "TutorialKit theme configuration",
+  "author": "StackBlitz Inc.",
+  "type": "module",
+  "bugs": "https://github.com/stackblitz/tutorialkit/issues",
+  "homepage": "https://github.com/stackblitz/tutorialkit",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stackblitz/tutorialkit.git",
+    "directory": "packages/theme"
+  },
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./transition-theme": {
+      "import": "./dist/transition-theme.js",
+      "types": "./dist/transition-theme.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "pnpm run build --watch --preserveWatchOutput",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@iconify-json/ph": "^1.1.13",
+    "@iconify-json/svg-spinners": "^1.1.2",
+    "fast-glob": "^3.3.2",
+    "unocss": "^0.59.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.4.1",
+    "typescript": "^5.4.5",
+    "vitest": "^3.0.5"
+  }
+}

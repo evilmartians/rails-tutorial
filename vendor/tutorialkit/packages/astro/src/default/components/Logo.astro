@@ -1,0 +1,30 @@
+---
+import { LOGO_EXTENSIONS } from '../utils/constants';
+import { readLogoFile } from '../utils/logo';
+
+interface Props {
+  logoLink: string;
+}
+
+const { logoLink } = Astro.props;
+
+const logo = readLogoFile('logo');
+const logoDark = readLogoFile('logo-dark') ?? logo;
+
+if (!logo) {
+  console.warn(
+    [
+      `No logo found in public/. Supported filenames are: logo.(${LOGO_EXTENSIONS.join('|')}). `,
+      `You can overwrite the logo for dark mode by providing a logo-dark.(${LOGO_EXTENSIONS.join('|')}).`,
+    ].join(''),
+  );
+}
+---
+
+<a
+  href={logoLink}
+  class="flex items-center text-tk-elements-topBar-logo-color hover:text-tk-elements-topBar-logo-colorHover"
+>
+  {logo && <img class="h-5 w-auto dark:hidden" src={logo} />}
+  {logo && <img class="h-5 w-auto hidden dark:inline-block" src={logoDark} />}
+</a>

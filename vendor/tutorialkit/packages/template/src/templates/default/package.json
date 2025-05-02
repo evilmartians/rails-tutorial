@@ -1,0 +1,10 @@
+{
+  "name": "example-lib",
+  "private": true,
+  "scripts": {
+    "start": "node ./src/index.js"
+  },
+  "dependencies": {
+    "servor": "4.0.2"
+  }
+}

@@ -1,0 +1,98 @@
+---
+import { HeadTags } from 'tutorialkit:override-components';
+import { ViewTransitions } from 'astro:transitions';
+import type { MetaTagsConfig } from '@tutorialkit/types';
+import MetaTags from '../components/MetaTags.astro';
+import { readPublicAsset } from '../utils/publicAsset';
+
+interface Props {
+  title: string;
+  meta?: MetaTagsConfig;
+}
+const { title, meta } = Astro.props;
+const faviconUrl = readPublicAsset('favicon.svg');
+const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : null;
+---
+
+<!doctype html>
+<html lang="en" transition:animate="none" class="h-full overflow-hidden">
+  <head>
+    <HeadTags>
+      <title slot="title">{title}</title>
+
+      <Fragment slot="links">
+        {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+        {faviconUrl ? <link rel="icon" type="image/svg+xml" href={faviconUrl} /> : null}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet" />
+      </Fragment>
+
+      <MetaTags slot="meta" meta={meta} />
+    </HeadTags>
+    <ViewTransitions />
+    <script is:inline>
+      setTutorialKitTheme();
+
+      function setTutorialKitTheme() {
+        let theme = localStorage.getItem('tk_theme');
+
+        if (!theme) {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        document.querySelector('html')?.setAttribute('data-theme', theme);
+      }
+    </script>
+    <script>
+      import { swapFunctions as builtInSwap } from 'astro:transitions/client';
+
+      declare global {
+        function setTutorialKitTheme(): void;
+      }
+
+      document.addEventListener('astro:before-swap', (event) => {
+        event.swap = () => {
+          const { newDocument } = event;
+
+          builtInSwap.deselectScripts(newDocument);
+          builtInSwap.swapRootAttributes(newDocument);
+
+          setTutorialKitTheme();
+
+          /**
+           * Keep the dynamically injected style sheet from Codemirror on all transitions.
+           */
+          const codemirrorStyles = document.head.querySelector('style[data-astro-transition-persist="codemirror"]');
+
+          builtInSwap.swapHeadElements(newDocument);
+
+          if (codemirrorStyles) {
+            document.head.insertAdjacentElement('afterbegin', codemirrorStyles);
+          }
+
+          // only swap the main area of the page so we keep the webcontainer iframe intact
+          const newMain = newDocument.querySelector('main[data-swap-root]');
+          const oldMain = document.querySelector('main[data-swap-root]');
+
+          if (newMain && oldMain) {
+            builtInSwap.swapBodyElement(newMain, oldMain);
+
+            // delete extraneous route announcer
+            document.querySelector('.astro-route-announcer')?.remove();
+          } else {
+            // fallback to built-in body swap semantics
+            builtInSwap.swapBodyElement(newDocument.body, document.body);
+          }
+        };
+      });
+    </script>
+  </head>
+  <body class="h-full text-black relative overflow-hidden">
+    <slot />
+  </body>
+</html>

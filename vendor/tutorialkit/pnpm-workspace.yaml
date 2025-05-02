@@ -1,0 +1,6 @@
+packages:
+  - 'packages/*'
+  - 'docs/*'
+  - 'extensions/*'
+  - 'integration'
+  - 'e2e'

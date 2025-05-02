@@ -1,0 +1,32 @@
+# PRs can be published by adding `pkg-pr-new` tag
+
+name: PR Preview Releases
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, labeled]
+
+jobs:
+  release:
+    if: github.repository == 'stackblitz/tutorialkit' && (github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'pkg-pr-new'))
+    runs-on: ubuntu-latest
+    name: 'Release: pkg.pr.new'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup-and-build
+
+      - name: Publish to pkg.pr.new
+        run: >
+          pnpm dlx pkg-pr-new publish --compact --pnpm
+          ./packages/astro
+          ./packages/react
+          ./packages/runtime
+          ./packages/theme
+          ./packages/types

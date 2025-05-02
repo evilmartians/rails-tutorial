@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "nodenext",
+    "verbatimModuleSyntax": true,
+    "moduleResolution": "nodenext",
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "noImplicitReturns": true,
+    "strict": true,
+    "paths": {
+      "@tutorialkit/test-utils": ["./packages/test-utils/src/index.ts"]
+    }
+  }
+}

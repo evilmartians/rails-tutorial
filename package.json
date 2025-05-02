@@ -8,9 +8,11 @@
     "build": "astro check && astro build",
     "dev": "astro dev",
     "preview": "astro preview",
-    "start": "astro dev"
+    "start": "astro dev",
+    "postinstall": "(cd vendor/tutorialkit/packages/react && (pnpm i > /dev/null || true) && pnpm build)"
   },
   "dependencies": {
+    "@codemirror/legacy-modes": "^6.5.1",
     "@tutorialkit/react": "1.5.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
