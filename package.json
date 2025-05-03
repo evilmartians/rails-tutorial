@@ -8,8 +8,7 @@
     "build": "astro check && astro build",
     "dev": "astro dev",
     "preview": "astro preview",
-    "start": "astro dev",
-    "postinstall": "(cd vendor/tutorialkit/packages/react && (pnpm i > /dev/null || true) && pnpm build)"
+    "start": "astro dev"
   },
   "dependencies": {
     "@tutorialkit/react": "file://./vendor/tutorialkit/packages/react",
