@@ -1,0 +1,48 @@
+#!/usr/bin/env -S node --disable-warning=ExperimentalWarning
+
+import initVM from "../server/ruby.js";
+import repl from "node:repl";
+
+const vm = await initVM();
+
+const isRecoverableError = (error) => {
+  if (error.message.includes('SyntaxError')) {
+    return /^(unexpected)/i.test(error.message);
+  }
+
+  return false;
+}
+
+const rubyEval = (cmd, context, filename, callback) => {
+  let result;
+  try {
+    result = vm.eval(cmd);
+  } catch (e) {
+    if (e.message.includes('SystemExit')) {
+      process.exit();
+    }
+    if (isRecoverableError(e)) {
+      return callback(new repl.Recoverable(e));
+    }
+
+    return callback(null, e.message);
+  }
+  callback(null, result);
+}
+
+const rubyWriter = (output) => {
+  if (!output) return;
+
+  if (typeof output === 'string') {
+    return output;
+  }
+
+  return output.call('inspect').toString();
+}
+
+const local = repl.start({prompt: '> ', eval: rubyEval, writer: rubyWriter});
+
+local.on('exit', () => {
+  // TODO: save history?
+  process.exit();
+});
