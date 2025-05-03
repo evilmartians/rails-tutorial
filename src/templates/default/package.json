@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "test": "node --disable-warning=ExperimentalWarning ./scripts/test.js",
+    "test:watch": "node --disable-warning=ExperimentalWarning --watch --watch-path=./project ./scripts/test.js"
   },
   "dependencies": {
     "@ruby/wasm-wasi": "^2.7.1",

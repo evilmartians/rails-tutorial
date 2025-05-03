@@ -1,7 +1,7 @@
 ---
 type: lesson
 title: Warmup
-focus: /word_count.rb
+focus: /project/word_count.rb
 ---
 
 # Welcome to TutorialKit.rb
