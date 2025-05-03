@@ -12,14 +12,17 @@
     "postinstall": "(cd vendor/tutorialkit/packages/react && (pnpm i > /dev/null || true) && pnpm build)"
   },
   "dependencies": {
-    "@codemirror/legacy-modes": "^6.5.1",
-    "@tutorialkit/react": "1.5.0",
+    "@tutorialkit/react": "file://./vendor/tutorialkit/packages/react",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
+  },
+  "resolutions": {
+    "@tutorialkit/react": "file://./vendor/tutorialkit/packages/react"
   },
   "devDependencies": {
     "@astrojs/check": "^0.7.0",
     "@astrojs/react": "^3.6.0",
+    "@flydotio/dockerfile": "^0.7.10",
     "@tutorialkit/astro": "1.5.0",
     "@tutorialkit/theme": "1.5.0",
     "@tutorialkit/types": "1.5.0",

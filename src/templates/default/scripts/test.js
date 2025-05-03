@@ -1,6 +1,4 @@
 import initVM from "../server/ruby.js";
-import fs from "fs/promises";
-import path from "path"
 
 const vm = await initVM();
 

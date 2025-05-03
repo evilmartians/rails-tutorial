@@ -1,0 +1,20 @@
+# fly.toml app configuration file generated for tutorialkit-rb-playground on 2025-05-02T17:18:25-07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'tutorialkit-rb-playground'
+primary_region = 'sea'
+
+[build]
+
+[http_service]
+  internal_port = 80
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  size = 'shared-cpu-1x'

@@ -18,7 +18,7 @@ export default async function initVM() {
       }
     }
   );
-  const { vm, instance } = await RubyVM.instantiateModule({
+  const { vm } = await RubyVM.instantiateModule({
     module, wasip1: wasi
   });
 
