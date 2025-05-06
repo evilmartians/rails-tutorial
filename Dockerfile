@@ -1,6 +1,5 @@
 # syntax = docker/dockerfile:1
 
-# Adjust NODE_VERSION as desired
 ARG NODE_VERSION=20.18.1
 FROM node:${NODE_VERSION}-slim AS base
 

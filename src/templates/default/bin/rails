@@ -1,0 +1,28 @@
+#!/usr/bin/env -S node --disable-warning=ExperimentalWarning
+
+import initVM from "../server/ruby.js";
+import util from "node:util";
+
+const vm = await initVM({env: {"HOME": "/rails-vm"}});
+const args = util.inspect(process.argv.slice(2));
+
+vm.eval(`
+  require "rails/command"
+
+  args = ${args}
+
+  begin
+    case args.first
+    when Rails::Command::HELP_MAPPINGS, "help", nil
+      args.shift
+      Rails::Command.invoke :gem_help, args
+    when "plugin"
+      args.shift
+      Rails::Command.invoke :plugin, args
+    else
+      Rails::Command.invoke :application, args
+    end
+  rescue SystemExit
+    # expected, do nothing
+  end
+`)

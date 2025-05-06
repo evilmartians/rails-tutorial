@@ -4,3 +4,5 @@
 .env
 Dockerfile
 fly.toml
+/dist
+/rails-wasm

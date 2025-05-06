@@ -1,0 +1,36 @@
+diff --git a/node_modules/@tutorialkit/runtime/dist/store/tutorial-runner.js b/node_modules/@tutorialkit/runtime/dist/store/tutorial-runner.js
+index e253906..1efc1db 100644
+--- a/node_modules/@tutorialkit/runtime/dist/store/tutorial-runner.js
++++ b/node_modules/@tutorialkit/runtime/dist/store/tutorial-runner.js
+@@ -459,7 +459,7 @@ export class TutorialRunner {
+             clearTimeout(timeoutId);
+             timeoutId = setTimeout(readFiles, 100);
+         };
+-        this._watcher = webcontainer.fs.watch('.', { recursive: true }, (eventType, filename) => {
++        this._watcher = webcontainer.fs.watch('.', { recursive: true }, async (eventType, filename) => {
+             const filePath = `/${filename}`;
+             // events we should ignore because we caused them in the TutorialRunner
+             if (!this._ignoreFileEvents.decrement(filePath)) {
+@@ -499,7 +499,8 @@ export class TutorialRunner {
+                         }
+                     });
+                     if (!this._editorStore.documents.get()[filePath]) {
+-                        this._editorStore.addFileOrFolder({ path: filePath, type: 'file' });
++                        const isDirectory = await _isDirectory(webcontainer, filePath);
++                        this._editorStore.addFileOrFolder({ path: filePath, type: isDirectory ? 'folder' : 'file' });
+                     }
+                     this._updateCurrentFiles({ [filePath]: '' });
+                     scheduleReadFor(filePath, 'utf-8');
+@@ -543,3 +544,12 @@ async function updateFiles(webcontainer, previousFiles, newFiles) {
+     }
+     await webcontainer.mount(toFileTree(addedOrModified));
+ }
++
++async function _isDirectory(webcontainer, filePath) {
++  try {
++    await webcontainer.fs.readdir(filePath);
++    return true;
++  } catch (error) {
++    return false;
++  }
++}
