@@ -1,9 +1,0 @@
-{
-  "recommendations": ["astro-build.astro-vscode"],
-  "unwantedRecommendations": [],
-  "search.exclude": {
-    "**/node_modules/**": true,
-    "**/*.code-search": true,
-    "cli/_template": true
-  }
-}

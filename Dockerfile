@@ -12,11 +12,6 @@ WORKDIR /app
 # Set production environment
 ENV NODE_ENV="production"
 
-# Install pnpm
-ARG PNPM_VERSION=8.15.6
-RUN npm install -g pnpm@$PNPM_VERSION
-
-
 # Throw-away build stage to reduce size of final image
 FROM base AS build
 
@@ -25,18 +20,18 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
 
 # Install node modules
-COPY package.json pnpm-lock.yaml ./
-COPY vendor/ ./vendor/
-RUN pnpm install --frozen-lockfile --prod=false
+COPY package.json package-lock.json ./
+COPY patches/ ./patches/
+RUN npm ci --production=false
 
 # Copy application code
 COPY . .
 
 # Build application
-RUN pnpm build
+RUN npm run build
 
 # Remove development dependencies
-RUN pnpm prune --prod
+RUN npm prune --production
 
 # Final stage for app image
 FROM nginx

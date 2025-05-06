@@ -27,8 +27,8 @@ Based on [TutorialKit](https://tutorialkit.dev).
 Make sure you have all dependencies installed and started the dev server:
 
 ```bash
-pnpm install
-pnpm start
+npm install
+npm start
 ```
 
 ## UI Structure

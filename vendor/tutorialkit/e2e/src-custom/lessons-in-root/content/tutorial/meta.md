@@ -1,5 +1,0 @@
----
-type: tutorial
-mainCommand: ''
-prepareCommands: []
----

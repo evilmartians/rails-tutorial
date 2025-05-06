@@ -1,9 +1,0 @@
-progress {
-  border: none;
-}
-
-progress::-webkit-progress-bar {
-}
-
-progress::-webkit-progress-value {
-}
