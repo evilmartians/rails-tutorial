@@ -34,3 +34,23 @@ index e253906..1efc1db 100644
 +    return false;
 +  }
 +}
+diff --git a/node_modules/@tutorialkit/runtime/dist/webcontainer/shell.js b/node_modules/@tutorialkit/runtime/dist/webcontainer/shell.js
+index 046165d..d1ecbdd 100644
+--- a/node_modules/@tutorialkit/runtime/dist/webcontainer/shell.js
++++ b/node_modules/@tutorialkit/runtime/dist/webcontainer/shell.js
+@@ -10,11 +10,15 @@ export async function newJSHProcess(webcontainer, terminal, options) {
+         args.push('--allow-commands', options.allowCommands.join(','));
+     }
+     // we spawn a JSH process with a fallback cols and rows in case the process is not attached yet to a visible terminal
++    console.log('WC Path', `${webcontainer.workdir}/bin:${webcontainer.path}`);
+     const process = await webcontainer.spawn('/bin/jsh', ['--osc', ...args], {
+         terminal: {
+             cols: terminal.cols ?? 80,
+             rows: terminal.rows ?? 15,
+         },
++        env: {
++          PATH: `${webcontainer.workdir}/_bin:${webcontainer.path}`,
++        },
+     });
+     const input = process.input.getWriter();
+     const output = process.output;

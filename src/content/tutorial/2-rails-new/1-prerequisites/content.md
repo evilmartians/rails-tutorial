@@ -4,8 +4,6 @@ title: Prerequisites
 editor: false
 ---
 
-import { TerminalConfigurator } from '@components/TerminalConfigurator.tsx';
-
 Creating a New Rails App
 ------------------------
 
@@ -30,5 +28,3 @@ Rails 8.0.2
 ```
 
 The version shown should be Rails 8.0.0 or higher.
-
-<TerminalConfigurator client:load />

@@ -7,7 +7,7 @@
     "dev": "vite",
     "test": "node --disable-warning=ExperimentalWarning ./scripts/test.js",
     "test:watch": "node --disable-warning=ExperimentalWarning --watch --watch-path=./project ./scripts/test.js",
-    "postinstall": "chmod +x bin/console && chmod +x bin/rails"
+    "postinstall": "chmod +x _bin/*"
   },
   "dependencies": {
     "@ruby/wasm-wasi": "^2.7.1",

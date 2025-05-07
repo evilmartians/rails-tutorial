@@ -3,8 +3,6 @@ type: lesson
 title: Creating your first Rails app
 ---
 
-import { TerminalConfigurator } from '@components/TerminalConfigurator.tsx';
-
 Creating Your First Rails App
 -----------------------------
 
@@ -20,7 +18,7 @@ To create our `store` application, run the following command in your terminal:
 $ rails new project/store
 ```
 
-:::tip
+:::info
 You can customize the application Rails generates by using flags. To see
 these options, run `rails new --help`.
 :::
@@ -64,5 +62,3 @@ new Rails application. You can open this folder in your code editor or run
 | .kamal/ | Contains Kamal secrets and deployment hooks. |
 | .rubocop.yml | This file contains the configuration for RuboCop. |
 | .ruby-version | This file contains the default Ruby version. |
-
-<TerminalConfigurator client:load />
