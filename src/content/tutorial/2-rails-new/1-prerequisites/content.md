@@ -2,6 +2,9 @@
 type: lesson
 title: Prerequisites
 editor: false
+custom:
+  shell:
+    workdir: "/workspace"
 ---
 
 Creating a New Rails App
