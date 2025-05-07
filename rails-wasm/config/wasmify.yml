@@ -1,5 +1,5 @@
 output_dir: "./dist"
-ruby_version: "3.4"
+ruby_version: "3.3"
 
 # Specify the list of directories to be included into the final
 # app.wasm file.

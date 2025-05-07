@@ -1,6 +1,9 @@
 ---
 type: lesson
 title: Creating your first Rails app
+custom:
+  shell:
+    workdir: "/workspace"
 ---
 
 Creating Your First Rails App
@@ -15,7 +18,7 @@ let's start there.
 To create our `store` application, run the following command in your terminal:
 
 ```bash
-$ rails new project/store
+$ rails new store
 ```
 
 :::info
@@ -26,7 +29,7 @@ these options, run `rails new --help`.
 After your new application is created, switch to its directory:
 
 ```bash
-$ cd project/store
+$ cd store
 ```
 
 ### Directory Structure

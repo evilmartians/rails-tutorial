@@ -5,7 +5,7 @@ prepareCommands:
   - ['npm install', 'Preparing Ruby runtime']
 previews: false
 filesystem:
-  watch: ['/*.json', '/project/**/*']
+  watch: ['/*.json', '/workspace/**/*']
 terminal:
   open: true
   activePanel: 0

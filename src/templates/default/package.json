@@ -6,13 +6,13 @@
   "scripts": {
     "dev": "vite",
     "test": "node --disable-warning=ExperimentalWarning ./scripts/test.js",
-    "test:watch": "node --disable-warning=ExperimentalWarning --watch --watch-path=./project ./scripts/test.js",
-    "postinstall": "chmod +x _bin/*"
+    "test:watch": "node --disable-warning=ExperimentalWarning --watch --watch-path=./workspace ./scripts/test.js",
+    "postinstall": "chmod +x bin/*"
   },
   "dependencies": {
     "@ruby/wasm-wasi": "^2.7.1",
     "@ruby/3.4-wasm-wasi": "^2.7.1",
-    "@rails-tutorial/wasm": "8.0.0-pre.1"
+    "@rails-tutorial/wasm": "8.0.2-pre.1"
   },
   "devDependencies": {
     "vite": "^5.2.0"

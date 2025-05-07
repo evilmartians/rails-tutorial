@@ -1,6 +1,6 @@
 #!/usr/bin/env -S node --disable-warning=ExperimentalWarning
 
-import initVM from "../server/ruby.js";
+import initVM from "../lib/rails.js";
 import repl from "node:repl";
 
 const vm = await initVM();

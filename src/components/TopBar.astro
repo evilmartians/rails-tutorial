@@ -1,5 +1,6 @@
 ---
 import path from 'node:path';
+import { ShellConfigurator } from './ShellConfigurator';
 
 const logo = path.join(import.meta.env.BASE_URL, 'logo.svg');
 const logoDark = path.join(import.meta.env.BASE_URL, 'logo-dark.svg');
@@ -33,3 +34,5 @@ const logoDark = path.join(import.meta.env.BASE_URL, 'logo-dark.svg');
     <slot name="login-button" />
   </div>
 </nav>
+
+<ShellConfigurator client:only />
