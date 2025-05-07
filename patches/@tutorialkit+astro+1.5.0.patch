@@ -1,0 +1,17 @@
+diff --git a/node_modules/@tutorialkit/astro/package.json b/node_modules/@tutorialkit/astro/package.json
+index 666f061..e477821 100644
+--- a/node_modules/@tutorialkit/astro/package.json
++++ b/node_modules/@tutorialkit/astro/package.json
+@@ -17,10 +17,12 @@
+     ".": "./dist/index.js",
+     "./types": "./types.d.ts",
+     "./default-theme.css": "./dist/default/styles/variables.css",
++    "./default/styles/base.css": "./dist/default/styles/base.css",
+     "./default/pages/index.astro": "./dist/default/pages/index.astro",
+     "./default/pages/[...slug].astro": "./dist/default/pages/[...slug].astro",
+     "./default/components/TopBar.astro": "./dist/default/components/TopBar.astro",
+     "./default/components/HeadTags.astro": "./dist/default/components/HeadTags.astro",
++    "./default/components/ThemeSwitch.tsx": "./dist/default/components/ThemeSwitch.tsx",
+     "./package.json": "./package.json"
+   },
+   "files": [

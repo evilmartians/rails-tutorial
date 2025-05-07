@@ -5,5 +5,12 @@ export default defineConfig({
   devToolbar: {
     enabled: false,
   },
-  integrations: [tutorialkit()],
+  integrations: [
+    tutorialkit({
+      components: {
+        TopBar: "./src/components/TopBar.astro",
+      },
+      defaultRoutes: "tutorial-only"
+    })
+  ],
 });

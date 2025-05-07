@@ -1,0 +1,74 @@
+---
+import HeadTags from '@tutorialkit/astro/default/components/HeadTags.astro';
+import { ThemeSwitch } from '@tutorialkit/astro/default/components/ThemeSwitch.tsx';
+import { ViewTransitions } from 'astro:transitions';
+import '@tutorialkit/astro/default/styles/base.css';
+import '@tutorialkit/custom.css';
+import path from 'node:path';
+
+let { meta, showLogo } = Astro.props.frontmatter;
+
+meta ||= {};
+const title = meta.title ?? 'Getting Started with Rails';
+
+meta.title ??= title;
+meta.description ??= 'An interactive Rails tutorial right in your browser';
+
+const logo = path.join(import.meta.env.BASE_URL, 'logo.svg');
+const logoDark = path.join(import.meta.env.BASE_URL, 'logo-dark.svg');
+---
+
+
+<!doctype html>
+<html lang="en" transition:animate="none">
+  <head>
+    <HeadTags>
+      <title slot="title">{title}</title>
+
+      <Fragment slot="links">
+        <link rel="icon" type="image/svg+xml" href='/favicon.svg' />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet" />
+      </Fragment>
+    </HeadTags>
+    <ViewTransitions />
+    <script is:inline>
+      setTutorialKitTheme();
+
+      function setTutorialKitTheme() {
+        let theme = localStorage.getItem('tk_theme');
+
+        if (!theme) {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        document.querySelector('html')?.setAttribute('data-theme', theme);
+      }
+    </script>
+  </head>
+  <body class="text-black relative">
+    <main class="max-w-full flex flex-col min-h-screen h-full transition-theme bg-tk-elements-app-backgroundColor text-tk-elements-app-textColor p-5" data-swap-root>
+      <nav
+        class="bg-tk-elements-topBar-backgroundColor transition-theme justify-end flex max-w-full items-center p-3 px-4 min-h-[56px]"
+      >
+        <div>
+          <ThemeSwitch client:load transition:persist />
+        </div>
+      </nav>
+      <div class="min-w-[600px] max-w-[1025px] mx-auto h-full flex flex-col markdown-content">
+        {showLogo &&
+        <div class="flex flex-row items-center justify-center p-5 mb-4">
+          <img class="h-40 w-auto dark:hidden" src={logo} />
+          <img class="h-40 w-auto hidden dark:inline-block" src={logoDark} />
+        </div>
+        }
+        <slot />
+      </div>
+    </main>
+  </body>
+</html>
