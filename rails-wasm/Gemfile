@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 gem "rails", "~> 8.0.0"
-gem "wasmify-rails", "~> 0.3.1"
+gem "wasmify-rails", "~> 0.3.2"
 
 # rails new gems
 gem "propshaft"
@@ -17,3 +17,5 @@ gem "solid_queue"
 gem "solid_cable"
 
 gem "image_processing", "~> 1.2"
+
+gem "tzinfo-data"

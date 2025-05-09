@@ -247,9 +247,11 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    tzinfo-data (1.2025.2)
+      tzinfo (>= 1.0.0)
     uri (1.0.3)
     useragent (0.16.11)
-    wasmify-rails (0.3.1)
+    wasmify-rails (0.3.2)
       js (>= 2.6, < 3.0)
       railties (>= 7.0, < 9.0)
       ruby_wasm (>= 2.6, < 3.0)
@@ -283,7 +285,8 @@ DEPENDENCIES
   solid_queue
   stimulus-rails
   turbo-rails
-  wasmify-rails (~> 0.3.1)
+  tzinfo-data
+  wasmify-rails (~> 0.3.2)
 
 BUNDLED WITH
    2.6.5

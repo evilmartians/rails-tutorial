@@ -32,6 +32,8 @@ export default async function initVM(vmopts = {}) {
   vm.eval(`
     Dir.chdir("${workdir}") unless "${workdir}".empty?
     require "/rails-vm/boot"
+
+    require "js"
   `)
 
   return vm;
