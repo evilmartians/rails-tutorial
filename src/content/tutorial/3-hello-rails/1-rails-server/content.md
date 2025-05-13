@@ -5,7 +5,7 @@ previews:
   - 3000
 custom:
   shell:
-    workdir: "/workspace"
+    workdir: "/workspace/store"
 ---
 
 Hello, Rails!
