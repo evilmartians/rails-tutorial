@@ -1,5 +1,5 @@
 default: &default
-  adapter: nulldb
+  adapter: sqlite3_wasm
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
 

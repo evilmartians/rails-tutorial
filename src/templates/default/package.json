@@ -13,8 +13,10 @@
     "@rails-tutorial/wasm": "8.0.2-pre.2",
     "@ruby/3.4-wasm-wasi": "^2.7.1",
     "@ruby/wasm-wasi": "^2.7.1",
+    "better-sqlite3": "^11.10.0",
     "express": "^5.1.0",
-    "set-cookie-parser": "^2.7.1"
+    "set-cookie-parser": "^2.7.1",
+    "sqlite-sync": "^0.3.9"
   },
   "devDependencies": {
     "vite": "^5.2.0"

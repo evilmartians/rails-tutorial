@@ -1,13 +1,17 @@
 import { RubyVM } from "@ruby/wasm-wasi";
 import { WASI } from "wasi";
 import fs from "fs/promises";
+import { setupSQLiteDatabase, registerSQLite3WasmInterface } from "./database.js";
 
 const rubyWasm = new URL("../node_modules/@rails-tutorial/wasm/dist/rails.wasm", import.meta.url).pathname;
+const dbDirPath = new URL("../workspace/store/storage", import.meta.url).pathname;
 
 export default async function initVM(vmopts = {}) {
   const { env, args } = vmopts;
   const binary = await fs.readFile(rubyWasm);
   const module = await WebAssembly.compile(binary);
+
+  const RAILS_ENV = env?.RAILS_ENV || "development";
 
   const workspaceDir = new URL("../workspace", import.meta.url).pathname;
   const workdir = process.cwd().startsWith(workspaceDir) ?
@@ -28,6 +32,17 @@ export default async function initVM(vmopts = {}) {
   const { vm } = await RubyVM.instantiateModule({
     module, wasip1: wasi
   });
+
+  let dbPath = null;
+  try {
+    await fs.readdir(dbDirPath);
+    dbPath = dbDirPath + `/${RAILS_ENV}sqlite3`;
+
+    const db = await setupSQLiteDatabase(dbPath);
+    registerSQLite3WasmInterface(db);
+  } catch (error) {
+    // not database directory — skip it
+  }
 
   vm.eval(`
     Dir.chdir("${workdir}") unless "${workdir}".empty?

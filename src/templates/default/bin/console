@@ -40,6 +40,14 @@ const rubyWriter = (output) => {
   return output.call('inspect').toString();
 }
 
+vm.eval(`
+  require_relative "config/environment"
+
+  ActiveRecord::Base.logger = Logger.new(STDOUT)
+
+  connection = ActiveRecord::Base.connection
+`)
+
 const local = repl.start({prompt: '> ', eval: rubyEval, writer: rubyWriter});
 
 local.on('exit', () => {

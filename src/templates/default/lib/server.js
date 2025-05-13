@@ -1,6 +1,5 @@
 import express from 'express';
 import setCookieParser from 'set-cookie-parser';
-import fs from "fs/promises";
 
 class IncomingRequest {
   // We prepare input outside to avoid async Ruby execution for now
