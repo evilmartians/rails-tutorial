@@ -7,20 +7,26 @@ const vm = await initVM({env: {"HOME": "/rails-vm"}});
 const args = util.inspect(process.argv.slice(2));
 
 await vm.evalAsync(`
-  require "rails/command"
-
   args = ${args}
+  ARGV.replace(args)
 
   begin
-    case args.first
-    when Rails::Command::HELP_MAPPINGS, "help", nil
-      args.shift
-      Rails::Command.invoke :gem_help, args
-    when "plugin"
-      args.shift
-      Rails::Command.invoke :plugin, args
+    if File.file?("config/application.rb")
+      APP_PATH = File.expand_path("config/application", Dir.pwd)
+      require File.expand_path("../boot", APP_PATH)
+      require "rails/commands"
     else
-      Rails::Command.invoke :application, args
+      require "rails/command"
+      case ARGV.first
+      when Rails::Command::HELP_MAPPINGS, "help", nil
+        ARGV.shift
+        Rails::Command.invoke :gem_help, ARGV
+      when "plugin"
+        ARGV.shift
+        Rails::Command.invoke :plugin, ARGV
+      else
+        Rails::Command.invoke :application, ARGV
+      end
     end
   rescue SystemExit
     # expected, do nothing
