@@ -6,7 +6,7 @@ import util from "node:util";
 const vm = await initVM({env: {"HOME": "/rails-vm"}});
 const args = util.inspect(process.argv.slice(2));
 
-vm.eval(`
+await vm.evalAsync(`
   require "rails/command"
 
   args = ${args}

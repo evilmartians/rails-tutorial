@@ -13,10 +13,10 @@ const isRecoverableError = (error) => {
   return false;
 }
 
-const rubyEval = (cmd, context, filename, callback) => {
+const rubyEval = async (cmd, context, filename, callback) => {
   let result;
   try {
-    result = vm.eval(cmd);
+    result = await vm.evalAsync(cmd);
   } catch (e) {
     if (e.message.includes('SystemExit')) {
       process.exit();
@@ -30,14 +30,15 @@ const rubyEval = (cmd, context, filename, callback) => {
   callback(null, result);
 }
 
-const rubyWriter = (output) => {
+const rubyWriter = async (output) => {
   if (!output) return;
 
   if (typeof output === 'string') {
     return output;
   }
 
-  return output.call('inspect').toString();
+  const res = await output.callAsync('inspect');
+  return res.toString();
 }
 
 vm.eval(`

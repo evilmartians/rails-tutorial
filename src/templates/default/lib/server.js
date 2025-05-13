@@ -174,7 +174,7 @@ const prepareInput = async (req) => {
 
 export const createRackServer = async (vm) => {
   // Set up Rack handler
-  vm.eval(`
+  await vm.evalAsync(`
     require "rack/builder"
     require "rack/wasi/incoming_handler"
 
@@ -206,7 +206,7 @@ export const createRackServer = async (vm) => {
     `
 
     try {
-      vm.eval(command);
+      await vm.evalAsync(command);
       await responseOut.promise;
       await responseOut.finish();
     } catch (e) {

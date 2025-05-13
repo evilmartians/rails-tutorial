@@ -1,10 +1,11 @@
 import { RubyVM } from "@ruby/wasm-wasi";
 import { WASI } from "wasi";
 import fs from "fs/promises";
-import { setupSQLiteDatabase, registerSQLite3WasmInterface } from "./database.js";
+import { setupDatabase } from "./database.js";
 
 const rubyWasm = new URL("../node_modules/@rails-tutorial/wasm/dist/rails.wasm", import.meta.url).pathname;
-const dbDirPath = new URL("../workspace/store/storage", import.meta.url).pathname;
+const railsRootDir = new URL("../workspace/store", import.meta.url).pathname;
+const pgDataDir = new URL("../pgdata", import.meta.url).pathname;
 
 export default async function initVM(vmopts = {}) {
   const { env, args } = vmopts;
@@ -33,13 +34,9 @@ export default async function initVM(vmopts = {}) {
     module, wasip1: wasi
   });
 
-  let dbPath = null;
   try {
-    await fs.readdir(dbDirPath);
-    dbPath = dbDirPath + `/${RAILS_ENV}sqlite3`;
-
-    const db = await setupSQLiteDatabase(dbPath);
-    registerSQLite3WasmInterface(db);
+    await fs.readdir(railsRootDir);
+    await setupDatabase(pgDataDir);
   } catch (error) {
     // not database directory — skip it
   }
