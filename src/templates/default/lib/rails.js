@@ -1,7 +1,7 @@
 import { RubyVM } from "@ruby/wasm-wasi";
 import { WASI } from "wasi";
 import fs from "fs/promises";
-import { setupDatabase } from "./database.js";
+import { PGLite4Rails } from "./database.js";
 
 const rubyWasm = new URL("../node_modules/@rails-tutorial/wasm/dist/rails.wasm", import.meta.url).pathname;
 
@@ -41,18 +41,24 @@ export default async function initVM(vmopts = {}) {
   });
 
   if (!skipRails) {
-    try {
-      await fs.readdir(railsRootDir);
-      await setupDatabase(pgDataDir);
-    } catch (error) {
-      // not database directory — skip it
-    }
+    const pglite = new PGLite4Rails(pgDataDir);
+    global.pglite = pglite;
+
+    // TODO: Move to wasmify-rails or rails-wasm
+    const patcha = await fs.readFile(new URL("./patches/patcha.rb", import.meta.url).pathname);
+    const pglitePatch = await fs.readFile(new URL("./patches/pglite.rb", import.meta.url).pathname);
 
     vm.eval(`
       Dir.chdir("${workdir}") unless "${workdir}".empty?
       require "/rails-vm/boot"
 
       require "js"
+
+      ${patcha}
+
+      ${pglitePatch}
+
+      Patcha.setup!
     `)
   }
 

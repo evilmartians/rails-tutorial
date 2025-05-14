@@ -1,15 +1,34 @@
 import { PGlite } from '@electric-sql/pglite'
+import { join } from "node:path";
 
-export const setupDatabase = async (path, opts = {}) => {
-  const db = await PGlite.create({ dataDir: path })
+class ExternalInterface {
+  constructor(db, identifier) {
+    this.db = db;
+    this.identifier = identifier;
+  }
 
-  const name = opts.name || "pglite4rails";
+  async query(sql, params) {
+    return this.db.query(sql, params);
+  }
+}
 
-  global[name] = {
-    async query(sql, params) {
-      return db.query(sql, params);
-    }
-  };
+export class PGLite4Rails {
+  constructor(dataDir) {
+    // Created databases
+    this.dbs = {};
+    // Base directory for all databases
+    this.dataDir = dataDir;
+  }
 
-  return db;
-};
+  async create_interface(dbname) {
+    if (this.dbs[dbname]) return this.dbs[dbname].identifier;
+
+    const db = await PGlite.create({ dataDir: join(this.dataDir, dbname) })
+    const ei = new ExternalInterface(db, `pglite4rails_${dbname}`)
+
+    const identifier = ei.identifier
+    global[identifier] = this.dbs[dbname] = ei
+
+    return identifier
+  }
+}
