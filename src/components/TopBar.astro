@@ -1,6 +1,7 @@
 ---
 import path from 'node:path';
 import { ShellConfigurator } from './ShellConfigurator';
+import { FileManager } from './FileManager';
 
 const logo = path.join(import.meta.env.BASE_URL, 'logo.svg');
 const logoDark = path.join(import.meta.env.BASE_URL, 'logo-dark.svg');
@@ -36,3 +37,4 @@ const logoDark = path.join(import.meta.env.BASE_URL, 'logo-dark.svg');
 </nav>
 
 <ShellConfigurator client:only />
+<FileManager client:only />
