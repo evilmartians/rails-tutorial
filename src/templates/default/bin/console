@@ -7,7 +7,7 @@ const vm = await initVM();
 
 const isRecoverableError = (error) => {
   if (error.message.includes('SyntaxError')) {
-    return /^(unexpected)/i.test(error.message);
+    return true;
   }
 
   return false;
@@ -27,27 +27,18 @@ const rubyEval = async (cmd, context, filename, callback) => {
 
     return callback(null, e.message);
   }
-  callback(null, result);
+  callback(null, await result.callAsync('inspect'));
 }
 
-const rubyWriter = async (output) => {
+const rubyWriter = (output) => {
   if (!output) return;
 
   if (typeof output === 'string') {
     return output;
   }
 
-  const res = await output.callAsync('inspect');
-  return res.toString();
+  return output.toString();
 }
-
-vm.eval(`
-  require_relative "config/environment"
-
-  ActiveRecord::Base.logger = Logger.new(STDOUT)
-
-  connection = ActiveRecord::Base.connection
-`)
 
 const local = repl.start({prompt: '> ', eval: rubyEval, writer: rubyWriter});
 
