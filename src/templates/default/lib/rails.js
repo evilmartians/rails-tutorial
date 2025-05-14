@@ -9,11 +9,13 @@ const railsRootDir = new URL("../workspace/store", import.meta.url).pathname;
 const pgDataDir = new URL("../pgdata", import.meta.url).pathname;
 
 export default async function initVM(vmopts = {}) {
-  const { env, args, skipRails } = vmopts;
+  const { args, skipRails } = vmopts;
+  const env = vmopts.env || {};
   const binary = await fs.readFile(rubyWasm);
   const module = await WebAssembly.compile(binary);
 
-  const RAILS_ENV = env?.RAILS_ENV || "development";
+  const RAILS_ENV = env.RAILS_ENV || process.env.RAILS_ENV;
+  if (RAILS_ENV) env.RAILS_ENV = RAILS_ENV;
 
   const workspaceDir = new URL("../workspace", import.meta.url).pathname;
   const workdir = process.cwd().startsWith(workspaceDir) ?
@@ -46,6 +48,8 @@ export default async function initVM(vmopts = {}) {
 
     // TODO: Move to wasmify-rails or rails-wasm
     const patcha = await fs.readFile(new URL("./patches/patcha.rb", import.meta.url).pathname);
+    const kernelPatch = await fs.readFile(new URL("./patches/kernel.rb", import.meta.url).pathname);
+    const activeSupportPatch = await fs.readFile(new URL("./patches/active_support.rb", import.meta.url).pathname);
     const pglitePatch = await fs.readFile(new URL("./patches/pglite.rb", import.meta.url).pathname);
 
     vm.eval(`
@@ -55,7 +59,8 @@ export default async function initVM(vmopts = {}) {
       require "js"
 
       ${patcha}
-
+      ${kernelPatch}
+      ${activeSupportPatch}
       ${pglitePatch}
 
       Patcha.setup!

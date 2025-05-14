@@ -23,7 +23,9 @@ export class PGLite4Rails {
   async create_interface(dbname) {
     if (this.dbs[dbname]) return this.dbs[dbname].identifier;
 
-    const db = await PGlite.create({ dataDir: join(this.dataDir, dbname) })
+    const dataDir = join(this.dataDir, dbname);
+
+    const db = await PGlite.create({ dataDir })
     const ei = new ExternalInterface(db, `pglite4rails_${dbname}`)
 
     const identifier = ei.identifier

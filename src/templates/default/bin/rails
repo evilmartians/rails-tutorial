@@ -28,6 +28,7 @@ await vm.evalAsync(`
         Rails::Command.invoke :application, ARGV
       end
     end
+    execute_at_exit_hooks
   rescue SystemExit
     # expected, do nothing
   end
