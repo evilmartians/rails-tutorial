@@ -25,3 +25,21 @@ index ed5edcb..24e9977 100644
  ];
  export async function getLanguage(fileName) {
      const languageDescription = LanguageDescription.matchFilename(supportedLanguages, fileName);
+diff --git a/node_modules/@tutorialkit/react/dist/core/FileTree.js b/node_modules/@tutorialkit/react/dist/core/FileTree.js
+index 900cbd7..9c4d048 100644
+--- a/node_modules/@tutorialkit/react/dist/core/FileTree.js
++++ b/node_modules/@tutorialkit/react/dist/core/FileTree.js
+@@ -9,9 +9,10 @@ export function FileTree({ files, onFileSelect, onFileChange, allowEditPatterns,
+     const fileList = useMemo(() => buildFileList(files, hideRoot, scope, computedHiddenFiles), [files, hideRoot, scope, computedHiddenFiles]);
+     const [collapsedFolders, setCollapsedFolders] = useState(() => new Set());
+     // reset collapsed folders when the list of files changes
+-    useEffect(() => {
+-        setCollapsedFolders(new Set());
+-    }, [files]);
++    // But why????
++    // useEffect(() => {
++    //     setCollapsedFolders(new Set());
++    // }, [files]);
+     const filteredFileList = useMemo(() => {
+         const list = [];
+         let lastDepth = Number.MAX_SAFE_INTEGER;
