@@ -1,8 +1,13 @@
 #!/usr/bin/env -S node --disable-warning=ExperimentalWarning
 
 import initVM from "../lib/rails.js";
+import ExternalCommands from "../lib/commands.js";
 import util from "node:util";
 import fs from "node:fs";
+
+const commands = new ExternalCommands();
+// Make commands accessible from Ruby via global JS object
+global.externalCommands = commands;
 
 const args = process.argv.slice(2);
 
@@ -19,11 +24,14 @@ if (args[0] && fs.existsSync(process.cwd() + '/' + args[0])) {
 
       begin
         load "./${path}"
-        execute_at_exit_hooks
+        execute_at_exit_hooks unless JS::ExternalCommands.any?
       rescue SystemExit
       end
     `);
+
+    commands.invoke(vm)
   }
 } else {
-  await initVM({ env: { "HOME": "/rails-vm" }, args, skipRails: true });
+  const vm = await initVM({ env: { "HOME": "/rails-vm" }, args, skipRails: true });
+  commands.invoke(vm)
 }

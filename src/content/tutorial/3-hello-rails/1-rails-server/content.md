@@ -28,28 +28,18 @@ $ bin/rails server
 NOTE: When we run commands inside an application directory, we should use
 `bin/rails`. This makes sure the application's version of Rails is used.
 
-This will start up a web server called Puma that will serve static files and
+This will start up a web server that will serve static files and
 your Rails application:
 
 ```bash
-=> Booting Puma
+=> Booting WASIServer
 => Rails 8.1.0 application starting in development
 => Run `bin/rails server --help` for more startup options
-Puma starting in single mode...
-* Puma version: 6.4.3 (ruby 3.3.5-p100) ("The Eagle of Durango")
-*  Min threads: 3
-*  Max threads: 3
-*  Environment: development
-*          PID: 12345
-* Listening on http://127.0.0.1:3000
-* Listening on http://[::1]:3000
+Express.js server started on port 3000
 Use Ctrl-C to stop
 ```
 
-To see your Rails application, open http://localhost:3000 in your browser. You
-will see the default Rails welcome page:
-
-It works!
+In the preview pane to your right you should see the default Rails welcome page. If you can see it—everything works as expected!
 
 This page is the *smoke test* for a new Rails application, ensuring that
 everything is working behind the scenes to serve a page.

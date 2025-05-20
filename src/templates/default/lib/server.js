@@ -172,49 +172,99 @@ const prepareInput = async (req) => {
   return input;
 }
 
-export const createRackServer = async (vm) => {
-  // Set up Rack handler
-  await vm.evalAsync(`
-    require "rack/builder"
-    require "rack/wasi/incoming_handler"
+export class RequestQueue {
+  constructor(handler){
+    this._handler = handler;
+    this.isProcessing = false;
+    this.queue = [];
+  }
 
-    app = Rack::Builder.load_file("./config.ru")
+  async respond(req, res) {
+    if (this.isProcessing) {
+      return new Promise((resolve) => {
+        this.queue.push({ req, res, resolve });
+      });
+    }
+    await this.process(req, res);
+    queueMicrotask(() => this.tick());
+  }
 
-    $incoming_handler = Rack::WASI::IncomingHandler.new(app)
-  `)
+  async process(req, res) {
+    this.isProcessing = true;
+    try {
+      await this._handler(req, res);
+    } catch (e) {
+      console.error(e);
+      res.status(500).send(`Application Error: ${e.message}`);
+    } finally {
+      this.isProcessing = false;
+    }
+  }
+
+  async tick() {
+    if (this.queue.length === 0) {
+      return;
+    }
+    const { req, res, resolve } = this.queue.shift();
+    await this.process(req, res);
+    resolve();
+    queueMicrotask(() => this.tick());
+  }
+}
+
+let counter = 0;
+
+const requestHandler = async (vm, req, res) => {
+  const input = await prepareInput(req);
+  const incomingRequest = new IncomingRequest(req, input);
+  const responseOut = new ResponseOutparam(res);
+
+  const requestId = `req-${counter++}`
+  const responseId = `res-${counter}`
+
+  global[requestId] = incomingRequest;
+  global[responseId] = responseOut;
+
+  const command = `
+    $incoming_handler.handle(
+      Rack::WASI::IncomingRequest.new("${requestId}"),
+      Rack::WASI::ResponseOutparam.new("${responseId}")
+    )
+  `
+
+  try {
+    await vm.evalAsync(command);
+    await responseOut.promise;
+    await responseOut.finish();
+  } catch (e) {
+    res.status(500).send(`Unexpected Error: ${e.message.slice(0, 100)}`);
+  } finally {
+    delete global[requestId];
+    delete global[responseId];
+  }
+}
+
+export const createRackServer = async (vm, opts = {}) => {
+  const { skipRackup } = opts;
+
+  if (!skipRackup) {
+    // Set up Rack handler (if hasn't been already set up)
+    await vm.evalAsync(`
+      require "rack/builder"
+      require "rack/wasi/incoming_handler"
+
+      app = Rack::Builder.load_file("./config.ru")
+
+      $incoming_handler = Rack::WASI::IncomingHandler.new(app)
+    `)
+  }
 
   const app = express();
 
-  let counter = 0;
+  const queue = new RequestQueue((req, res) => requestHandler(vm, req, res));
 
   app.all('*path', async (req, res) => {
-    const input = await prepareInput(req);
-    const incomingRequest = new IncomingRequest(req, input);
-    const responseOut = new ResponseOutparam(res);
-
-    const requestId = `req-${counter++}`
-    const responseId = `res-${counter}`
-
-    global[requestId] = incomingRequest;
-    global[responseId] = responseOut;
-
-    const command = `
-      $incoming_handler.handle(
-        Rack::WASI::IncomingRequest.new("${requestId}"),
-        Rack::WASI::ResponseOutparam.new("${responseId}")
-      )
-    `
-
-    try {
-      await vm.evalAsync(command);
-      await responseOut.promise;
-      await responseOut.finish();
-    } catch (e) {
-      res.status(500).send(`Unexpected Error: ${e.message.slice(0, 100)}`);
-    } finally {
-      delete global[requestId];
-      delete global[responseId];
-    }
+    await queue.respond(req, res)
   });
 
   return app;

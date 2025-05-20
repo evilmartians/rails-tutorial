@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --disable-warning=ExperimentalWarning
+#!/usr/bin/env -S node --disable-warning=ExperimentalWarning --watch --watch-path=./
 
 import initVM from "../lib/rails.js";
 import { createRackServer } from "../lib/server.js";
