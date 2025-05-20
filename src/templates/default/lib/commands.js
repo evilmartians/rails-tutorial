@@ -1,4 +1,5 @@
 import { createRackServer } from "./server.js";
+import IRBRepl from "./irb.js";
 
 export default class ExternalCommands {
   constructor() {
@@ -19,6 +20,13 @@ export default class ExternalCommands {
         console.log('Express.js server is shutting down');
         await vm.evalAsync(`execute_at_exit_hooks`)
       });
+    }
+  }
+
+  console() {
+    this.command = async function(vm) {
+      const irb = new IRBRepl(vm);
+      return irb.start();
     }
   }
 

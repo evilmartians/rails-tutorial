@@ -10,6 +10,13 @@ module JS
         @command = __method__
       end
 
+      def console
+        raise ArgumentError, "Command already defined: #{command}" if command
+
+        ::JS.global[:externalCommands].console
+        @command = __method__
+      end
+
       def any? = !!command
     end
   end

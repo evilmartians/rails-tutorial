@@ -53,6 +53,7 @@ export default async function initVM(vmopts = {}) {
     const activeSupportPatch = await fs.readFile(new URL("./patches/active_support.rb", import.meta.url).pathname);
     const pglitePatch = await fs.readFile(new URL("./patches/pglite.rb", import.meta.url).pathname);
     const rackPatch = await fs.readFile(new URL("./patches/rack.rb", import.meta.url).pathname);
+    const irbPatch = await fs.readFile(new URL("./patches/irb.rb", import.meta.url).pathname);
 
     vm.eval(`
       Dir.chdir("${workdir}") unless "${workdir}".empty?
@@ -66,6 +67,7 @@ export default async function initVM(vmopts = {}) {
       ${activeSupportPatch}
       ${pglitePatch}
       ${rackPatch}
+      ${irbPatch}
 
       Patcha.setup!
     `)

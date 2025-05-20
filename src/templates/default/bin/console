@@ -1,48 +1,9 @@
 #!/usr/bin/env -S node --disable-warning=ExperimentalWarning
 
 import initVM from "../lib/rails.js";
-import repl from "node:repl";
+import IRBRepl from "../lib/irb.js";
 
 const vm = await initVM();
+const irb = new IRBRepl(vm);
 
-const isRecoverableError = (error) => {
-  if (error.message.includes('SyntaxError')) {
-    return true;
-  }
-
-  return false;
-}
-
-const rubyEval = async (cmd, context, filename, callback) => {
-  let result;
-  try {
-    result = await vm.evalAsync(cmd);
-  } catch (e) {
-    if (e.message.includes('SystemExit')) {
-      process.exit();
-    }
-    if (isRecoverableError(e)) {
-      return callback(new repl.Recoverable(e));
-    }
-
-    return callback(null, e.message);
-  }
-  callback(null, await result.callAsync('inspect'));
-}
-
-const rubyWriter = (output) => {
-  if (!output) return;
-
-  if (typeof output === 'string') {
-    return output;
-  }
-
-  return output.toString();
-}
-
-const local = repl.start({prompt: '> ', eval: rubyEval, writer: rubyWriter});
-
-local.on('exit', () => {
-  // TODO: save history?
-  process.exit();
-});
+irb.start();
