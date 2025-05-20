@@ -1,0 +1,13 @@
+diff --git a/node_modules/@tutorialkit/theme/dist/index.js b/node_modules/@tutorialkit/theme/dist/index.js
+index e6669fb..3939937 100644
+--- a/node_modules/@tutorialkit/theme/dist/index.js
++++ b/node_modules/@tutorialkit/theme/dist/index.js
+@@ -52,7 +52,7 @@ export function getInlineContentForPackage({ name, pattern, root }) {
+     }
+ }
+ function readCustomIcons() {
+-    const iconPaths = globSync('./icons/languages/*.svg');
++    const iconPaths = globSync('./icons/**/*.svg');
+     return iconPaths.reduce((acc, iconPath) => {
+         const collectionName = basename(dirname(iconPath));
+         const [iconName] = basename(iconPath).split('.');

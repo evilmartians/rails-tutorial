@@ -43,3 +43,35 @@ index 900cbd7..9c4d048 100644
      const filteredFileList = useMemo(() => {
          const list = [];
          let lastDepth = Number.MAX_SAFE_INTEGER;
+diff --git a/node_modules/@tutorialkit/react/dist/Panels/EditorPanel.js b/node_modules/@tutorialkit/react/dist/Panels/EditorPanel.js
+index 109e4eb..e3ce527 100644
+--- a/node_modules/@tutorialkit/react/dist/Panels/EditorPanel.js
++++ b/node_modules/@tutorialkit/react/dist/Panels/EditorPanel.js
+@@ -61,6 +61,15 @@ function getFileIcon(fileName) {
+         case 'json': {
+             return 'i-languages-json?mask';
+         }
++        case 'rb': {
++            return 'i-languages-ruby?mask';
++        }
++        case 'ru': {
++            return 'i-languages-ruby?mask';
++        }
++        case 'erb': {
++            return 'i-languages-erb?mask';
++        }
+         case 'gif':
+         case 'jpg':
+         case 'jpeg':
+diff --git a/node_modules/@tutorialkit/react/dist/core/FileTree.js b/node_modules/@tutorialkit/react/dist/core/FileTree.js
+index 900cbd7..678396c 100644
+--- a/node_modules/@tutorialkit/react/dist/core/FileTree.js
++++ b/node_modules/@tutorialkit/react/dist/core/FileTree.js
+@@ -188,4 +188,7 @@ const extensionsToIcons = new Map([
+     ['jpeg', 'i-ph-file-image-duotone'],
+     ['png', 'i-ph-file-image-duotone'],
+     ['svg', 'i-ph-file-svg-duotone'],
++    ['rb', 'i-phosphor-file-rb'],
++    ['ru', 'i-phosphor-file-rb'],
++    ['erb', 'i-phosphor-file-erb'],
+ ]);
