@@ -12,6 +12,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@codemirror/lang-yaml": "^6.1.2",
     "@codemirror/legacy-modes": "^6.5.1",
     "@tutorialkit/react": "1.5.0",
     "react": "^18.3.1",
