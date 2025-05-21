@@ -25,7 +25,7 @@ export const ShellConfigurator: React.FC = () => {
 
   const conf = tutorialStore.lesson?.data?.custom?.shell as ShellConfig
   if (conf) {
-    const workdir = conf.workdir;
+    const { workdir } = conf;
 
     if (workdir) {
       terminal.input(`cd /home/tutorial${workdir} && clear\n`);

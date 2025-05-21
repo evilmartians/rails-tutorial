@@ -1,0 +1,3 @@
+{
+  "extends": "../../2-database-migrations/_files"
+}
