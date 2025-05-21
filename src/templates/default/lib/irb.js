@@ -49,13 +49,15 @@ $irb.eval_code(__code__)
 
   async start() {
     // Set up IRB
-    await this.vm.evalAsync(`
+    const promptVal = await this.vm.evalAsync(`
       require "irb"
 
       STDOUT.sync = true
-      ap_path = __FILE__
-      $0 = File::basename(ap_path, ".rb") if ap_path
-      IRB.setup(ap_path)
+      if IRB.conf.empty?
+        ap_path = __FILE__
+        $0 = File::basename(ap_path, ".rb") if ap_path
+        IRB.setup(ap_path)
+      end
 
       class NonBlockingIO
         def gets
@@ -90,9 +92,15 @@ $irb.eval_code(__code__)
       end
 
       $irb = IRB::Irb.new(nil, IRB::StdioInputMethod.new)
+
+      # return configured prompt
+      IRB.conf[:PROMPT][IRB.conf[:PROMPT_MODE]][:PROMPT_I]
+        .gsub(/(%\\d+)?n/, "") # no line number support
+        .then { $irb.send(:format_prompt, _1, nil, 0, 0) }
     `)
 
-    const local = repl.start({prompt: '> ', eval: this.eval, writer: rubyWriter});
+    const prompt = promptVal.toJS()
+    const local = repl.start({prompt, eval: this.eval, writer: rubyWriter});
 
     local.on('exit', () => {
       // TODO: save history?

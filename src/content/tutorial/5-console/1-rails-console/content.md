@@ -13,25 +13,25 @@ Now that we have created our products table, we can interact with it in Rails.
 Let's try it out.
 
 For this, we're going to use a Rails feature called the *console*. The console
-is a helpful, interactive tool for testing our code in our Rails application.
+is a helpful, interactive tool for testing our code in our Rails application. Run the following command in the terminal:
 
 ```bash
 $ bin/rails console
 ```
 
-You will be presented with a prompt like the following:
+You should see a prompt like the following:
 
 ```irb
 Loading development environment (Rails 8.0.2)
 store(dev)>
 ```
 
-Here we can type code that will be executed when we hit `Enter`. Let's try
+Now we can type code that will be executed when we hit `Enter`. Try
 printing out the Rails version:
 
 ```irb
 store(dev)> Rails.version
-=> "8.0.2"
+<!-- hit Enter -->
 ```
 
-It works!
+If the line "8.0.2" appears, it works!
