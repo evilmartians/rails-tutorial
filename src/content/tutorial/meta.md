@@ -14,4 +14,5 @@ terminal:
       id: 'cmds'
       title: 'Command Line'
       allowRedirects: true
+    - ['output', 'Setup Logs']
 ---
