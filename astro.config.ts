@@ -9,6 +9,7 @@ export default defineConfig({
     tutorialkit({
       components: {
         TopBar: "./src/components/TopBar.astro",
+        HeadTags: "./src/components/HeadTags.astro"
       },
       defaultRoutes: "tutorial-only"
     })
