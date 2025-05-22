@@ -5,6 +5,8 @@ Patcha.on_load("ActiveRecord::ConnectionAdapters::PGliteAdapter") do
       config[:js_interface] = JS.global[:pglite].create_interface(config[:database]).await.to_s
       super(config)
     end
+
+    def finished? = true
   end)
 end
 
