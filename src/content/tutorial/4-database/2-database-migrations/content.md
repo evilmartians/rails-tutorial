@@ -4,6 +4,9 @@ title: Database Migrations
 custom:
   shell:
     workdir: "/workspace/store"
+  fs:
+    remove:
+      - "/workspace/store"
 ---
 
 Database Migrations

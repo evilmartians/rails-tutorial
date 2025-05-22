@@ -4,6 +4,9 @@ title: Running Migrations
 custom:
   shell:
     workdir: "/workspace/store"
+  fs:
+    remove:
+      - "/workspace/store"
 ---
 
 Running Migrations

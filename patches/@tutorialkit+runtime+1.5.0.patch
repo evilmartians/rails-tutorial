@@ -1,3 +1,17 @@
+diff --git a/node_modules/@tutorialkit/runtime/dist/store/index.js b/node_modules/@tutorialkit/runtime/dist/store/index.js
+index a0d73ec..b2f2ec2 100644
+--- a/node_modules/@tutorialkit/runtime/dist/store/index.js
++++ b/node_modules/@tutorialkit/runtime/dist/store/index.js
+@@ -106,7 +106,8 @@ export class TutorialStore {
+         this._lessonTask = newTask(async (signal) => {
+             const templatePromise = this._lessonFilesFetcher.getLessonTemplate(lesson);
+             const filesPromise = this._lessonFilesFetcher.getLessonFiles(lesson);
+-            const preparePromise = this._runner.prepareFiles({ template: templatePromise, files: filesPromise, signal });
++            const removePaths = lesson?.data?.custom?.fs?.remove;
++            const preparePromise = this._runner.prepareFiles({ template: templatePromise, files: filesPromise, signal, removePaths });
+             this._runner.runCommands();
+             const [template, solution, files] = await Promise.all([
+                 templatePromise,
 diff --git a/node_modules/@tutorialkit/runtime/dist/store/terminal.js b/node_modules/@tutorialkit/runtime/dist/store/terminal.js
 index 31edbb5..18be6b8 100644
 --- a/node_modules/@tutorialkit/runtime/dist/store/terminal.js
@@ -11,10 +25,36 @@ index 31edbb5..18be6b8 100644
                      .catch(() => {
                      // do nothing
 diff --git a/node_modules/@tutorialkit/runtime/dist/store/tutorial-runner.js b/node_modules/@tutorialkit/runtime/dist/store/tutorial-runner.js
-index e253906..1efc1db 100644
+index e253906..9b1e4ba 100644
 --- a/node_modules/@tutorialkit/runtime/dist/store/tutorial-runner.js
 +++ b/node_modules/@tutorialkit/runtime/dist/store/tutorial-runner.js
-@@ -459,7 +459,7 @@ export class TutorialRunner {
+@@ -151,7 +151,7 @@ export class TutorialRunner {
+      *
+      * @see {LoadFilesOptions}
+      */
+-    prepareFiles({ files, template, signal, abortPreviousLoad = true }) {
++    prepareFiles({ files, template, signal, abortPreviousLoad = true, removePaths = undefined }) {
+         const previousLoadPromise = this._currentLoadTask?.promise;
+         if (abortPreviousLoad) {
+             this._currentLoadTask?.cancel();
+@@ -167,6 +167,16 @@ export class TutorialRunner {
+             [template, files] = await Promise.all([template, files]);
+             signal.throwIfAborted();
+             if (this._currentFiles || this._currentTemplate) {
++                if (removePaths) {
++                  for(const path of removePaths) {
++                    for(const filePath of Object.keys(this._currentFiles)) {
++                      if (filePath.startsWith(path)) {
++                        delete this._currentFiles[filePath];
++                      }
++                    }
++                    await webcontainer.fs.rm(path, {recursive: true});
++                  }
++                }
+                 await updateFiles(webcontainer, { ...this._currentTemplate, ...this._currentFiles }, { ...template, ...files });
+             }
+             else {
+@@ -459,7 +469,7 @@ export class TutorialRunner {
              clearTimeout(timeoutId);
              timeoutId = setTimeout(readFiles, 100);
          };
@@ -23,7 +63,7 @@ index e253906..1efc1db 100644
              const filePath = `/${filename}`;
              // events we should ignore because we caused them in the TutorialRunner
              if (!this._ignoreFileEvents.decrement(filePath)) {
-@@ -499,7 +499,8 @@ export class TutorialRunner {
+@@ -499,7 +509,8 @@ export class TutorialRunner {
                          }
                      });
                      if (!this._editorStore.documents.get()[filePath]) {
@@ -33,7 +73,7 @@ index e253906..1efc1db 100644
                      }
                      this._updateCurrentFiles({ [filePath]: '' });
                      scheduleReadFor(filePath, 'utf-8');
-@@ -543,3 +544,12 @@ async function updateFiles(webcontainer, previousFiles, newFiles) {
+@@ -543,3 +554,12 @@ async function updateFiles(webcontainer, previousFiles, newFiles) {
      }
      await webcontainer.mount(toFileTree(addedOrModified));
  }

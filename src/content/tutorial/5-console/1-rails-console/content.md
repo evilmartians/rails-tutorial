@@ -4,6 +4,9 @@ title: Rails Console
 custom:
   shell:
     workdir: "/workspace/store"
+  fs:
+    remove:
+      - "/workspace/store"
 ---
 
 Rails Console
