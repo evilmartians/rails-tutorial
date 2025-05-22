@@ -1,6 +1,7 @@
 ---
 type: lesson
 title: Database Migrations
+focus: /workspace/store/db/migrate/20250521010850_create_products.rb
 custom:
   shell:
     workdir: "/workspace/store"
@@ -21,7 +22,7 @@ they can be deployed to production (live, online!) safely.
 
 In the editor, open the migration Rails created for us so we can see what
 the migration does. This is located in
-`db/migrate/<timestamp>_create_products.rb`:
+`db/migrate/20250521010850_create_products`:
 
 ```file:/workspace/store/db/migrate/20250521010850_create_products.rb
 ```

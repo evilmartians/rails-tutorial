@@ -1,6 +1,7 @@
 ---
 type: lesson
 title: Running Migrations
+focus: /workspace/store/db/migrate/20250521010850_create_products.rb
 custom:
   shell:
     workdir: "/workspace/store"
@@ -23,10 +24,10 @@ This command checks for any new migrations and applies them to your database.
 Its output looks like this:
 
 ```bash
-== 20240426151900 CreateProducts: migrating ===================================
+== 20250521010850 CreateProducts: migrating ===================================
 -- create_table(:products)
    -> 0.0030s
-== 20240426151900 CreateProducts: migrated (0.0031s) ==========================
+== 20250521010850 CreateProducts: migrated (0.0031s) ==========================
 ```
 
 :::tip
