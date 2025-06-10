@@ -86,6 +86,20 @@ index e253906..9b1e4ba 100644
 +    return false;
 +  }
 +}
+diff --git a/node_modules/@tutorialkit/runtime/dist/webcontainer/preview-info.js b/node_modules/@tutorialkit/runtime/dist/webcontainer/preview-info.js
+index bab229f..021f13e 100644
+--- a/node_modules/@tutorialkit/runtime/dist/webcontainer/preview-info.js
++++ b/node_modules/@tutorialkit/runtime/dist/webcontainer/preview-info.js
+@@ -23,6 +23,9 @@ export class PreviewInfo {
+         this.pathname = preview.pathname;
+         this.portInfo = portInfo;
+     }
++    set path(val) {
++      this.pathname = val;
++    }
+     static parse(preview) {
+         if (typeof preview === 'number') {
+             return {
 diff --git a/node_modules/@tutorialkit/runtime/dist/webcontainer/shell.js b/node_modules/@tutorialkit/runtime/dist/webcontainer/shell.js
 index 046165d..c5d3e39 100644
 --- a/node_modules/@tutorialkit/runtime/dist/webcontainer/shell.js

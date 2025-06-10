@@ -18,6 +18,108 @@ index 109e4eb..4906be4 100644
          case 'gif':
          case 'jpg':
          case 'jpeg':
+diff --git a/node_modules/@tutorialkit/react/dist/Panels/PreviewPanel.js b/node_modules/@tutorialkit/react/dist/Panels/PreviewPanel.js
+index 8fe0723..c329c41 100644
+--- a/node_modules/@tutorialkit/react/dist/Panels/PreviewPanel.js
++++ b/node_modules/@tutorialkit/react/dist/Panels/PreviewPanel.js
+@@ -88,11 +88,92 @@ function Preview({ preview, iframe, previewCount, first, last, toggleTerminal, i
+             reloadPreview(iframe.ref);
+         }
+     }
+-    return (_jsxs("div", { className: "panel-container", children: [_jsxs("div", { className: classNames('panel-header border-b border-tk-elements-app-borderColor justify-between', {
+-                    'border-l border-tk-elements-app-borderColor': !first,
+-                }), children: [_jsxs("div", { className: "panel-title", children: [_jsx("button", { onClick: reload, title: i18n.reloadPreviewTitle, className: "panel-button rounded-full p-1.5 -my-1.5 -ml-2", children: _jsx("div", { className: "panel-icon i-ph-arrow-clockwise" }) }), _jsx("span", { className: "text-sm truncate", children: previewTitle(preview, previewCount, i18n) })] }), last && (_jsxs("button", { className: "panel-button px-2 py-0.5 -mr-1 -my-1", title: "Toggle Terminal", onClick: () => toggleTerminal?.(), children: [_jsx("div", { className: "panel-button-icon i-ph-terminal-window-duotone" }), _jsx("span", { className: "text-sm", children: i18n.toggleTerminalButtonText })] }))] }), _jsx("div", { ref: previewContainerRef, className: classNames('h-full w-full flex justify-center items-center', {
+-                    'border-l border-tk-elements-previews-borderColor': !first,
+-                }) })] }));
++
++    function open(newPath) {
++      if (!preview.url) return;
++
++      preview.path = newPath;
++      if (iframe.ref) {
++        iframe.ref.src = preview.url;
++      }
++
++      reload();
++    }
++
++    const urlPath = preview.url ? new URL(preview.url).pathname.replace("/", "") + new URL(preview.url).search : '';
++
++    return (
++        _jsxs("div", {
++            className: "panel-container",
++            children: [
++                _jsxs("div", {
++                    className: classNames('panel-header border-b border-tk-elements-app-borderColor justify-between', {
++                        'border-l border-tk-elements-app-borderColor': !first,
++                    }),
++                    children: [
++                        _jsxs("div", {
++                            className: "panel-title",
++                            children: [
++                                _jsx("button", {
++                                    onClick: reload,
++                                    title: i18n.reloadPreviewTitle,
++                                    className: "panel-button rounded-full p-1.5 -my-1.5 -ml-2",
++                                    children: _jsx("div", {
++                                        className: "panel-icon i-ph-arrow-clockwise"
++                                    })
++                                }),
++                                _jsx("span", {
++                                    className: "text-sm truncate",
++                                    children: previewTitle(preview, previewCount, i18n)
++                                })
++                            ]
++                        }),
++                        preview.url && _jsxs("div", {
++                            className: "flex items-center bg-gray-100 rounded px-2 py-1",
++                            children: [
++                                _jsx("span", {
++                                    className: "text-gray-500 text-sm",
++                                    children: "http://localhost:3000/"
++                                }),
++                                _jsx("input", {
++                                    type: "text",
++                                    defaultValue: urlPath,
++                                    className: "bg-transparent border-none focus:outline-none text-sm flex-1",
++                                    onKeyDown: (e) => {
++                                      if (e.key === 'Enter') {
++                                        open(e.target.value);
++                                      }
++                                    }
++                                })
++                            ]
++                        }),
++                        last && (
++                            _jsxs("button", {
++                                className: "panel-button px-2 py-0.5 -mr-1 -my-1",
++                                title: "Toggle Terminal",
++                                onClick: () => toggleTerminal?.(),
++                                children: [
++                                    _jsx("div", {
++                                        className: "panel-button-icon i-ph-terminal-window-duotone"
++                                    }),
++                                    _jsx("span", {
++                                        className: "text-sm",
++                                        children: i18n.toggleTerminalButtonText
++                                    })
++                                ]
++                            })
++                        )
++                    ]
++                }),
++                _jsx("div", {
++                    ref: previewContainerRef,
++                    className: classNames('h-full w-full flex justify-center items-center', {
++                        'border-l border-tk-elements-previews-borderColor': !first,
++                    })
++                })
++            ]
++        })
++    );
+ }
+ function requestAnimationFrameLoop(loop) {
+     let handle;
 diff --git a/node_modules/@tutorialkit/react/dist/core/CodeMirrorEditor/languages.js b/node_modules/@tutorialkit/react/dist/core/CodeMirrorEditor/languages.js
 index ed5edcb..8ede98e 100644
 --- a/node_modules/@tutorialkit/react/dist/core/CodeMirrorEditor/languages.js
