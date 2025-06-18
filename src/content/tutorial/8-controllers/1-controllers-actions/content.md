@@ -4,6 +4,8 @@ title: Controllers & Actions
 custom:
   shell:
     workdir: "/workspace/store"
+filesystem:
+  watch: true
 ---
 
 Controllers & Actions
