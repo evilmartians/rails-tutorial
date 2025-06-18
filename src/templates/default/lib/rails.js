@@ -54,6 +54,7 @@ export default async function initVM(vmopts = {}) {
     const pglitePatch = await fs.readFile(new URL("./patches/pglite.rb", import.meta.url).pathname);
     const rackPatch = await fs.readFile(new URL("./patches/rack.rb", import.meta.url).pathname);
     const irbPatch = await fs.readFile(new URL("./patches/irb.rb", import.meta.url).pathname);
+    const railsPatch = await fs.readFile(new URL("./patches/rails.rb", import.meta.url).pathname);
 
     vm.eval(`
       Dir.chdir("${workdir}") unless "${workdir}".empty?
@@ -68,6 +69,7 @@ export default async function initVM(vmopts = {}) {
       ${pglitePatch}
       ${rackPatch}
       ${irbPatch}
+      ${railsPatch}
 
       Patcha.setup!
     `)

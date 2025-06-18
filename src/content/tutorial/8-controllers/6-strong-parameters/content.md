@@ -20,6 +20,10 @@ permitted parameters for products is `:name` and Rails will ignore any other
 parameters. This protects our application from malicious users who might try to
 hack our application.
 
+:::tip
+Try this feature in action by removing the `:name` parameter from the list or replacing it with something else. What will happen if you try to submit the form?
+:::
+
 #### Handling Errors
 
 After assigning these params to the new `Product`, we can try to save it to the
