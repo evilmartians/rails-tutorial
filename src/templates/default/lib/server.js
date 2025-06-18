@@ -38,13 +38,6 @@ class IncomingRequest {
       this._preparedHeaders[key] = req.headers[key];
     }
 
-    if (req.cookies) {
-      const railsCookie = Object.entries(req.cookies)
-        .map(([name, value]) => `${name}=${value}`)
-        .join("; ");
-      this._preparedHeaders["Cookie"] = railsCookie;
-    }
-
     return this._preparedHeaders;
   }
 
@@ -54,7 +47,8 @@ class IncomingRequest {
 }
 
 class ResponseOutparam {
-  constructor(response) {
+  constructor(request, response) {
+    this.request = request;
     this.response = response;
     this._resolve = null;
     this.promise = new Promise(resolve => {
@@ -80,9 +74,7 @@ class ResponseOutparam {
       });
 
       if (headers["set-cookie"]) {
-        const cookies = setCookieParser.parse(headers["set-cookie"], {
-          decodeValues: false,
-        });
+        const cookies = setCookieParser.parse(headers["set-cookie"]);
         cookies.forEach(cookie => {
           res.cookie(cookie.name, cookie.value, {
             domain: cookie.domain,
@@ -91,6 +83,13 @@ class ResponseOutparam {
             sameSite: cookie.sameSite.toLowerCase()
           });
         });
+      }
+
+      if (headers["location"]) {
+        const location = headers["location"];
+        if (location.startsWith("http://localhost:3000/")) {
+          res.set("location", location.replace("http://localhost:3000", ""));
+        }
       }
 
       let body = response.call("body").toJS();
@@ -217,7 +216,7 @@ let counter = 0;
 const requestHandler = async (vm, req, res) => {
   const input = await prepareInput(req);
   const incomingRequest = new IncomingRequest(req, input);
-  const responseOut = new ResponseOutparam(res);
+  const responseOut = new ResponseOutparam(req, res);
 
   const requestId = `req-${counter++}`
   const responseId = `res-${counter}`
