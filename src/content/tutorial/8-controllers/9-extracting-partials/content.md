@@ -62,7 +62,7 @@ Let's create `app/views/products/edit.html.erb` with the following:
 ```
 
 To learn more about view partials, check out the
-[Action View Guide](action_view_overview.html).
+[Action View Guide](https://guides.rubyonrails.org/action_view_overview.html).
 
 :::success
 Now, everything is ready to go and try editing the products! Launch the Rails server and give this new feature a try!

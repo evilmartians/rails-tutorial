@@ -9,3 +9,8 @@ module Kernel
     @@at_exit_hooks.reverse_each { _1.call }
   end
 end
+
+module FileUtils
+  # Touch doesn't work for some reason
+  def self.touch(path) = File.write(path, "")
+end
