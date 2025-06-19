@@ -55,6 +55,7 @@ export default async function initVM(vmopts = {}) {
     const rackPatch = await fs.readFile(new URL("./patches/rack.rb", import.meta.url).pathname);
     const irbPatch = await fs.readFile(new URL("./patches/irb.rb", import.meta.url).pathname);
     const railsPatch = await fs.readFile(new URL("./patches/rails.rb", import.meta.url).pathname);
+    const actionTextPatch = await fs.readFile(new URL("./patches/action_text.rb", import.meta.url).pathname);
 
     vm.eval(`
       Dir.chdir("${workdir}") unless "${workdir}".empty?
@@ -70,6 +71,7 @@ export default async function initVM(vmopts = {}) {
       ${rackPatch}
       ${irbPatch}
       ${railsPatch}
+      ${actionTextPatch}
 
       Patcha.setup!
     `)

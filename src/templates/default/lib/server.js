@@ -1,5 +1,6 @@
 import express from 'express';
 import setCookieParser from 'set-cookie-parser';
+import multer from 'multer';
 
 class IncomingRequest {
   // We prepare input outside to avoid async Ruby execution for now
@@ -95,10 +96,23 @@ class ResponseOutparam {
       let body = response.call("body").toJS();
 
       if (headers["content-type"]?.startsWith("image/")) {
-        const image = await fetch(
-          `data:${headers["content-type"]};base64,${body}`
-        );
-        body = await image.blob();
+        try {
+          const buffer = Buffer.from(body, 'base64');
+
+          if (buffer.length === 0) {
+            console.error('Empty buffer after base64 conversion');
+            res.status(500).send('Failed to decode image data');
+            return;
+          }
+
+          res.status(response.call("status_code").toJS());
+          res.type(headers["content-type"]);
+          res.send(buffer);
+          return;
+        } catch(e) {
+          console.error(`failed to decode image (${headers["content-type"]}):`, e)
+          res.status(500).send(`Express Error: ${e.message}`);
+        }
       }
 
       res.status(response.call("status_code").toJS());
@@ -112,20 +126,38 @@ class ResponseOutparam {
 // We convert files from forms into data URIs and handle them via Rack DataUriUploads middleware.
 const DATA_URI_UPLOAD_PREFIX = "BbC14y";
 
-const fileToDataURI = async (file) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
+const fileToDataURI = async (file, mimetype) => {
+  const base64 = file.toString('base64');
+  const mimeType = mimetype || 'application/octet-stream';
+  return `data:${mimeType};base64,${base64}`;
+};
 
-    reader.onload = () => {
-      resolve(reader.result);
-    };
+const flattenObject = (obj, prefix = '') => {
+  const params = {};
 
-    reader.onerror = (error) => {
-      reject(error);
-    };
+  for (const [key, value] of Object.entries(obj)) {
+    const paramKey = prefix ? `${prefix}[${key}]` : key;
 
-    reader.readAsDataURL(file);
-  });
+    if (value === null || value === undefined) {
+      // ignore
+    } else if (typeof value === 'object' && !Array.isArray(value)) {
+      const nestedParams = flattenObject(value, paramKey);
+      Object.entries(nestedParams).forEach(([k, v]) => params[k] = v);
+    } else if (Array.isArray(value)) {
+      value.forEach((item, index) => {
+        if (typeof item === 'object' && item !== null) {
+          const nestedParams = flattenObject(item, `${paramKey}[${index}]`);
+          Object.entries(nestedParams).forEach(([k, v]) => params[k] = v);
+        } else {
+          params[`${paramKey}[]`] = item.toString();
+        }
+      });
+    } else {
+      params[paramKey] = value.toString();
+    }
+  }
+
+  return params;
 };
 
 const prepareInput = async (req) => {
@@ -139,21 +171,21 @@ const prepareInput = async (req) => {
     const contentType = req.get("content-type");
 
     if (contentType?.includes("multipart/form-data")) {
-      const formData = { ...req.body };  // Start with non-file form fields
+      const formData = flattenObject({ ...req.body });
 
-      if (req.files) {
-        // Add file fields
-        Object.entries(req.files).reduce(async (acc, [key, file]) => {
-          try {
-            const dataURI = await fileToDataURI(file);
-            acc[key] = DATA_URI_UPLOAD_PREFIX + dataURI;
-          } catch (e) {
-            console.warn(
-              `Failed to convert file into data URI: ${e.message}. Ignoring file form input ${key}`,
-            );
-          }
-          return acc;
-        }, formData);
+      if (req.files && req.files.length > 0) {
+        await Promise.all(
+          req.files.map(async (file) => {
+            try {
+              const dataURI = await fileToDataURI(file.buffer, file.mimetype);
+              formData[file.fieldname] = DATA_URI_UPLOAD_PREFIX + dataURI;
+            } catch (e) {
+              console.warn(
+                `Failed to convert file into data URI: ${e.message}. Ignoring file form input ${file.fieldname}`,
+              );
+            }
+          })
+        );
       }
 
       const params = new URLSearchParams(formData);
@@ -259,6 +291,9 @@ export const createRackServer = async (vm, opts = {}) => {
   }
 
   const app = express();
+
+  const upload = multer({ storage: multer.memoryStorage() });
+  app.use(upload.any());
 
   const queue = new RequestQueue((req, res) => requestHandler(vm, req, res));
 
