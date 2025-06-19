@@ -26,5 +26,17 @@ module Store
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # TODO: Move this patch to wasmify-rails
+    class FixupMiddleware
+			def initialize(app) = @app = app
+
+			def call(env)
+				env["CONTENT_TYPE"] = env["HTTP_CONTENT_TYPE"]
+				@app.call(env)
+			end
+		end
+
+		config.middleware.insert_before Rack::Runtime, FixupMiddleware
   end
 end
