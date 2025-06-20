@@ -70,7 +70,7 @@ section.product img {
 
 Then we'll update `app/views/products/show.html.erb` to use these new styles.
 
-```erb#1,3,6,18-19
+```erb {1,3,6,18-19}
 <p><%= link_to "Back", products_path %></p>
 
 <section class="product">

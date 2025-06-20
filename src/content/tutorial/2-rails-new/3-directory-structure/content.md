@@ -1,6 +1,6 @@
 ---
 type: lesson
-title: Creating your first Rails app
+title: Directory Structure
 editor: false
 custom:
   shell:
