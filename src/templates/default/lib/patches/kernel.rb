@@ -14,3 +14,10 @@ module FileUtils
   # Touch doesn't work for some reason
   def self.touch(path) = File.write(path, "")
 end
+
+Patcha.on_load("Socket") do
+  # Mail gem uses it
+  def Socket.gethostname
+    "localhost"
+  end
+end
