@@ -46,34 +46,20 @@ export default async function initVM(vmopts = {}) {
     const pglite = new PGLite4Rails(pgDataDir);
     global.pglite = pglite;
 
-    // TODO: Move to wasmify-rails or rails-wasm
-    const patcha = await fs.readFile(new URL("./patches/patcha.rb", import.meta.url).pathname);
-    const jsPatch = await fs.readFile(new URL("./patches/js.rb", import.meta.url).pathname);
-    const kernelPatch = await fs.readFile(new URL("./patches/kernel.rb", import.meta.url).pathname);
-    const activeSupportPatch = await fs.readFile(new URL("./patches/active_support.rb", import.meta.url).pathname);
-    const pglitePatch = await fs.readFile(new URL("./patches/pglite.rb", import.meta.url).pathname);
-    const rackPatch = await fs.readFile(new URL("./patches/rack.rb", import.meta.url).pathname);
-    const irbPatch = await fs.readFile(new URL("./patches/irb.rb", import.meta.url).pathname);
-    const railsPatch = await fs.readFile(new URL("./patches/rails.rb", import.meta.url).pathname);
-    const actionTextPatch = await fs.readFile(new URL("./patches/action_text.rb", import.meta.url).pathname);
+    const authenticationPatch = await fs.readFile(new URL("./patches/authentication.rb", import.meta.url).pathname, 'utf8');
 
     vm.eval(`
       Dir.chdir("${workdir}") unless "${workdir}".empty?
+
+      ENV["RACK_HANDLER"] = "wasi"
+
       require "/rails-vm/boot"
 
       require "js"
 
-      ${patcha}
-      ${jsPatch}
-      ${kernelPatch}
-      ${activeSupportPatch}
-      ${pglitePatch}
-      ${rackPatch}
-      ${irbPatch}
-      ${railsPatch}
-      ${actionTextPatch}
+      Wasmify::ExternalCommands.register(:server, :console)
 
-      Patcha.setup!
+      ${authenticationPatch}
     `)
   }
 

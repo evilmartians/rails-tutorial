@@ -1,6 +1,6 @@
 {
   "name": "@rails-tutorial/wasm",
-  "version": "8.0.2-pre.2",
+  "version": "8.0.2-rc.1",
   "description": "Prebuilt Wasm module with Ruby 3.3, Rails and default Rails gems",
   "exports": {
     "./dist/rails.wasm": "./dist/rails.wasm"

@@ -24,7 +24,7 @@ if (args[0] && fs.existsSync(process.cwd() + '/' + args[0])) {
 
       begin
         load "./${path}"
-        execute_at_exit_hooks unless JS::ExternalCommands.any?
+        execute_at_exit_hooks unless Wasmify::ExternalCommands.any?
       rescue SystemExit
       end
     `);

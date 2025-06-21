@@ -3,6 +3,12 @@
 # Common Rails shims
 require "wasmify/rails/shim"
 
+# Load Rails patches
+require "wasmify/rails/patches"
+
+# Setup external commands
+require "wasmify/external_commands"
+
 # Patch Bundler.require to only require precompiled deps
 # (We don't want to deal with group: :wasm here)
 def Bundler.require(*groups)
