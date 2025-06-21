@@ -1,6 +1,8 @@
 import { PGlite } from '@electric-sql/pglite'
 import { join } from "node:path";
 
+const MULTILINE_RX = /;\s*(SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|TRUNCATE|WITH|EXPLAIN|ANALYZE|VACUUM|GRANT|REVOKE|BEGIN|COMMIT|ROLLBACK)/i
+
 class ExternalInterface {
   constructor(db, identifier) {
     this.db = db;
@@ -8,7 +10,15 @@ class ExternalInterface {
   }
 
   async query(sql, params) {
-    return this.db.query(sql, params);
+    let res;
+
+    if (MULTILINE_RX.test(sql)) {
+      res = (await this.db.exec(sql, params))[0];
+    } else {
+      res = await this.db.query(sql, params);
+    }
+
+    return res
   }
 }
 
