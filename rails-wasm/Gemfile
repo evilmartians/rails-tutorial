@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 gem "rails", "~> 8.0.0"
-gem "wasmify-rails", "~> 0.3.2"
+gem "wasmify-rails", "~> 0.3.2", path: "/Users/vladimirdementyev/dev/writebook/gems/wasmify-rails"
 
 # rails new gems
 gem "propshaft"
