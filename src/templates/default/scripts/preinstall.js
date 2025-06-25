@@ -42,7 +42,7 @@ async function installPackage(packageName, version) {
 
 async function main() {
   const railsWasmExists = await checkIfFileExists(RAILS_WASM_PATH);
-  
+
   if (railsWasmExists) {
     const success = await moveFile(RAILS_WASM_PATH, TARGET_FILE);
     if (!success) {
