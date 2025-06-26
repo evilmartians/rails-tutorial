@@ -3,12 +3,14 @@ import tutorialStore from 'tutorialkit:store';
 import { useRef, useEffect } from 'react';
 import { webcontainer } from 'tutorialkit:core';
 import type { WebContainer } from '@webcontainer/api';
+import { RAILS_WASM_PACKAGE_VERSION } from '../templates/default/lib/constants';
 
 export function FileManager() {
   const files = useStore(tutorialStore.files);
   const processedFiles = useRef(new Set<string>());
   const wasmCached = useRef(false);
   const cachingInterval = useRef<number | null>(null);
+  const VERSIONED_RAILS_WASM_FILE_NAME = `rails-${RAILS_WASM_PACKAGE_VERSION}.wasm`;
 
   async function chmodx(wc: WebContainer, path: string) {
     const process = await wc.spawn('chmod', ['+x', path]);
@@ -25,8 +27,9 @@ export function FileManager() {
   async function fetchCachedWasmFile(): Promise<Uint8Array | null> {
     try {
       const opfsRoot = await navigator.storage.getDirectory();
-      const fileHandle = await opfsRoot.getFileHandle('rails.wasm');
+      const fileHandle = await opfsRoot.getFileHandle(VERSIONED_RAILS_WASM_FILE_NAME);
       const file = await fileHandle.getFile();
+      console.log(`Found cached WASM version ${RAILS_WASM_PACKAGE_VERSION}`);
       return new Uint8Array(await file.arrayBuffer());
     } catch {
       return null;
@@ -36,11 +39,11 @@ export function FileManager() {
   async function persistWasmFile(wasmData: Uint8Array): Promise<void> {
     try {
       const opfsRoot = await navigator.storage.getDirectory();
-      const fileHandle = await opfsRoot.getFileHandle('rails.wasm', { create: true });
+      const fileHandle = await opfsRoot.getFileHandle(VERSIONED_RAILS_WASM_FILE_NAME, { create: true });
       const writable = await fileHandle.createWritable();
       await writable.write(wasmData);
       await writable.close();
-      console.log('Rails WASM cached');
+      console.log(`Rails WASM v${RAILS_WASM_PACKAGE_VERSION} cached`);
     } catch (error) {
       console.error('Failed to persist Rails WASM:', error);
     }
@@ -49,7 +52,7 @@ export function FileManager() {
   async function cacheWasmFile(wc: WebContainer): Promise<void> {
     if (cachingInterval.current) return;
 
-    console.log('Caching WASM file...');
+    console.log(`Caching WASM file v${RAILS_WASM_PACKAGE_VERSION}...`);
 
     cachingInterval.current = window.setInterval(async () => {
       try {
@@ -76,8 +79,8 @@ export function FileManager() {
       if (!wasmCached.current) {
         const cachedWasm = await fetchCachedWasmFile();
         if (cachedWasm) {
-          await wc.fs.writeFile('rails.wasm', cachedWasm);
-          console.log('Rails WASM loaded from cache');
+          await wc.fs.writeFile(VERSIONED_RAILS_WASM_FILE_NAME, cachedWasm);
+          console.log(`Rails WASM v${RAILS_WASM_PACKAGE_VERSION} loaded from cache`);
           wasmCached.current = true;
         } else {
           await cacheWasmFile(wc);

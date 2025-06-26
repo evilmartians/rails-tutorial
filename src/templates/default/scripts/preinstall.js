@@ -3,8 +3,8 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { execSync } from 'child_process';
-
-const RAILS_WASM_PATH = './rails.wasm';
+import { RAILS_WASM_PACKAGE_VERSION } from '../lib/constants.js';
+const VERSIONED_RAILS_WASM_PATH = `./rails-${RAILS_WASM_PACKAGE_VERSION}.wasm`;
 const TARGET_DIR = 'node_modules/@rails-tutorial/wasm/dist';
 const TARGET_FILE = path.join(TARGET_DIR, 'rails.wasm');
 
@@ -21,6 +21,7 @@ async function moveFile(src, dest) {
   try {
     await fs.mkdir(path.dirname(dest), { recursive: true });
     await fs.rename(src, dest);
+    console.log(`✓ Moved ${src} to ${dest}`);
     return true;
   } catch (error) {
     console.error(`✗ Failed to move ${src} to ${dest}:`, error.message);
@@ -41,15 +42,15 @@ async function installPackage(packageName, version) {
 }
 
 async function main() {
-  const railsWasmExists = await checkIfFileExists(RAILS_WASM_PATH);
+  const versionedWasmExists = await checkIfFileExists(VERSIONED_RAILS_WASM_PATH);
 
-  if (railsWasmExists) {
-    const success = await moveFile(RAILS_WASM_PATH, TARGET_FILE);
+  if (versionedWasmExists) {
+    const success = await moveFile(VERSIONED_RAILS_WASM_PATH, TARGET_FILE);
     if (!success) {
       process.exit(1);
     }
   } else {
-    const success = await installPackage('@rails-tutorial/wasm', '8.0.2-pre.2');
+    const success = await installPackage('@rails-tutorial/wasm', RAILS_WASM_PACKAGE_VERSION);
     if (!success) {
       process.exit(1);
     }
