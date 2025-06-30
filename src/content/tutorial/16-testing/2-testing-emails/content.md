@@ -1,6 +1,6 @@
 ---
 type: lesson
-title: Fixtures
+title: Testing Emails
 focus: /workspace/store/test/models/product_test.rb
 previews:
   - 3000
