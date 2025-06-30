@@ -1,5 +1,6 @@
 import tutorialkit from '@tutorialkit/astro';
 import { defineConfig } from 'astro/config';
+import remarkRailsPathLinks from './src/plugins/remarkRailsPathLinks';
 
 export default defineConfig({
   devToolbar: {
@@ -14,4 +15,7 @@ export default defineConfig({
       defaultRoutes: "tutorial-only"
     })
   ],
+  markdown: {
+    remarkPlugins: [remarkRailsPathLinks],
+  },
 });
