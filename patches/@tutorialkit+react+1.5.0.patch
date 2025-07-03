@@ -19,7 +19,7 @@ index 109e4eb..4906be4 100644
          case 'jpg':
          case 'jpeg':
 diff --git a/node_modules/@tutorialkit/react/dist/Panels/PreviewPanel.js b/node_modules/@tutorialkit/react/dist/Panels/PreviewPanel.js
-index 8fe0723..46d363c 100644
+index 8fe0723..66a4e34 100644
 --- a/node_modules/@tutorialkit/react/dist/Panels/PreviewPanel.js
 +++ b/node_modules/@tutorialkit/react/dist/Panels/PreviewPanel.js
 @@ -1,7 +1,7 @@
@@ -40,7 +40,7 @@ index 8fe0723..46d363c 100644
      useEffect(() => {
          if (!iframe.ref) {
              return;
-@@ -83,16 +85,122 @@ function Preview({ preview, iframe, previewCount, first, last, toggleTerminal, i
+@@ -83,16 +85,123 @@ function Preview({ preview, iframe, previewCount, first, last, toggleTerminal, i
              iframe.ref.title = preview.title;
          }
      }, [preview.url, iframe.ref]);
@@ -128,6 +128,7 @@ index 8fe0723..46d363c 100644
 +                                _jsx("input", {
 +                                    type: "text",
 +                                    value: urlPath,
++                                    name: "tutorialkit-preview-navigation",
 +                                    onChange: (e) => setCurrentUrlPath(e.target.value),
 +                                    className: "bg-transparent border-none focus:outline-none text-sm flex-1",
 +                                    onKeyDown: (e) => {
