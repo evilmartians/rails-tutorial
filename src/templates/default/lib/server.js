@@ -1,6 +1,7 @@
 import express from 'express';
 import setCookieParser from 'set-cookie-parser';
 import multer from 'multer';
+import createFrameLocationTrackingMiddleware from './server/frame_location_middleware.js';
 
 class IncomingRequest {
   // We prepare input outside to avoid async Ruby execution for now
@@ -294,6 +295,7 @@ export const createRackServer = async (vm, opts = {}) => {
 
   const upload = multer({ storage: multer.memoryStorage() });
   app.use(upload.any());
+  app.use(createFrameLocationTrackingMiddleware());
 
   const queue = new RequestQueue((req, res) => requestHandler(vm, req, res));
 

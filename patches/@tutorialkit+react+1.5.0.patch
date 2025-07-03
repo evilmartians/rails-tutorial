@@ -19,10 +19,57 @@ index 109e4eb..4906be4 100644
          case 'jpg':
          case 'jpeg':
 diff --git a/node_modules/@tutorialkit/react/dist/Panels/PreviewPanel.js b/node_modules/@tutorialkit/react/dist/Panels/PreviewPanel.js
-index 8fe0723..c329c41 100644
+index 8fe0723..46d363c 100644
 --- a/node_modules/@tutorialkit/react/dist/Panels/PreviewPanel.js
 +++ b/node_modules/@tutorialkit/react/dist/Panels/PreviewPanel.js
-@@ -88,11 +88,92 @@ function Preview({ preview, iframe, previewCount, first, last, toggleTerminal, i
+@@ -1,7 +1,7 @@
+ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+ import { useStore } from '@nanostores/react';
+ import { reloadPreview } from '@webcontainer/api/utils';
+-import { createElement, forwardRef, memo, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
++import { createElement, forwardRef, memo, useCallback, useState, useEffect, useImperativeHandle, useRef } from 'react';
+ import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
+ import { BootScreen } from '../BootScreen.js';
+ import resizePanelStyles from '../styles/resize-panel.module.css';
+@@ -71,6 +71,8 @@ export const PreviewPanel = memo(forwardRef(({ showToggleTerminal, toggleTermina
+ PreviewPanel.displayName = 'PreviewPanel';
+ function Preview({ preview, iframe, previewCount, first, last, toggleTerminal, i18n }) {
+     const previewContainerRef = useRef(null);
++    const [currentUrlPath, setCurrentUrlPath] = useState('');
++
+     useEffect(() => {
+         if (!iframe.ref) {
+             return;
+@@ -83,16 +85,122 @@ function Preview({ preview, iframe, previewCount, first, last, toggleTerminal, i
+             iframe.ref.title = preview.title;
+         }
+     }, [preview.url, iframe.ref]);
++
++    useEffect(() => {
++        if (!iframe.ref) {
++            return;
++        }
++
++        const handleLoadMessage = (event) => {
++          if (event.data && event.data.type === '$locationChange') {
++            const iframeSrc = event.data.location.href;
++            if (iframeSrc) {
++              const url = new URL(iframeSrc);
++              const path = url.pathname.replace("/", "") + url.search;
++              setCurrentUrlPath(path);
++            }
++          }
++        };
++
++        window.addEventListener('message', handleLoadMessage);
++
++        return () => {
++          window.removeEventListener('message', handleLoadMessage);
++        };
++    }, [iframe.ref]);
++
+     function reload() {
+         if (iframe.ref) {
              reloadPreview(iframe.ref);
          }
      }
@@ -35,15 +82,15 @@ index 8fe0723..c329c41 100644
 +    function open(newPath) {
 +      if (!preview.url) return;
 +
-+      preview.path = newPath;
-+      if (iframe.ref) {
-+        iframe.ref.src = preview.url;
-+      }
++      const baseUrl = new URL(preview.url);
++      const newUrl = new URL(newPath, baseUrl.origin);
 +
-+      reload();
++      if (iframe.ref) {
++        iframe.ref.src = newUrl.href;
++      }
 +    }
 +
-+    const urlPath = preview.url ? new URL(preview.url).pathname.replace("/", "") + new URL(preview.url).search : '';
++    const urlPath = currentUrlPath || (preview.url ? new URL(preview.url).pathname.replace("/", "") + new URL(preview.url).search : '');
 +
 +    return (
 +        _jsxs("div", {
@@ -80,7 +127,8 @@ index 8fe0723..c329c41 100644
 +                                }),
 +                                _jsx("input", {
 +                                    type: "text",
-+                                    defaultValue: urlPath,
++                                    value: urlPath,
++                                    onChange: (e) => setCurrentUrlPath(e.target.value),
 +                                    className: "bg-transparent border-none focus:outline-none text-sm flex-1",
 +                                    onKeyDown: (e) => {
 +                                      if (e.key === 'Enter') {
