@@ -1,26 +1,11 @@
-# TutorialKit.rb Starter
+# Rails Tutorial in the Browser
 
-This README includes everything you need to start writing your in-browser Ruby tutorials content.
+> [!TIP]
+> Check out this tutorial live at [rails-tutorial.evilmartians.io](https://rails-tutorial.evilmartians.io).
 
-Based on [TutorialKit](https://tutorialkit.dev).
+This is a source code of the in-browser Rails Tutorial built with [ruby.wasm][], [wasmify-rails][], [PGlite][] and [TutorialKit][].
 
-## Project Structure
-
-```bash
-.
-├── astro.config.mjs    # TutorialKit uses Astro 🚀 (https://astro.build)
-├── src
-│   ├── ...
-│   ├── content
-│   │   └── tutorial    # Your tutorial content lives here
-│   └── templates       # Your templates (see below for more information)
-├── public
-│   ├── favicon.svg
-│   └── logo.svg        # Default logo used in top left for your tutorial
-├── ...
-├── theme.ts            # Customize the theme of the tutorial
-└── uno.config.ts       # UnoCSS config (https://unocss.dev/)
-```
+The tutorial contents are based on the official [Getting Started with Rails](https://guides.rubyonrails.org/getting_started.html) guide.
 
 ## Getting Started
 
@@ -31,69 +16,33 @@ npm install
 npm start
 ```
 
-## UI Structure
-
-```markdown
-┌─────────────────────────────────────────────────────┐
-│ ● ● ●                                               │
-├───────────────────────────┬─────────────────────────┤
-│                           │                         │
-│                           │                         │
-│                           │                         │
-│                           │                         │
-│                           │       Code Editor       │
-│                           │                         │
-│                           │                         │
-│                           │                         │
-│                           │                         │
-│          Content          ├─────────────────────────┤
-│                           │                         │
-│                           │                         │
-│                           │  Preview & Boot Screen  │
-│                           │                         │
-│                           │                         │
-│                           ├─────────────────────────┤
-│                           │                         │
-│                           │        Terminal         │
-│                           │                         │
-└───────────────────────────┴─────────────────────────┘
-```
-
-## Authoring Content
-
-A tutorial consists of parts, chapters, and lessons. For example:
-
-- Part 1: Basics of Vite
-  - Chapter 1: Introduction
-    - Lesson 1: Welcome!
-    - Lesson 2: Why Ruby?
-    - …
-  - Chapter 2: Your first Vite project
-- Part 2: CLI
-  - …
-
-Your content is organized into lessons, with chapters and parts providing a structure and defining common metadata for these lessons.
-
-Here’s an example of how it would look like in `src/content/tutorial`:
+## Project Structure
 
 ```bash
-tutorial
-├── 1-basics-of-ruby
-│   ├── 1-introduction
-│   │   ├── 1-welcome
-│   │   │   ├── content.md    # The content of your lesson
-│   │   │   ├── _files        # Initial set of files
-│   │   │   │   └── ...
-│   │   │   └── _solution     # Solution of the lesson
-│   │   │       └── ...
-│   │   ├── 2-why-ruby
-│   │   │   ├── content.md
-│   │   │   └── _files
-│   │   │       └── ...
-│   │   └── meta.md           # Metadata for the chapter
-│   └── meta.md               # Metadata for the part
-├── 2-advanced
+.
+├── astro.config.mjs    # TutorialKit uses Astro 🚀 (https://astro.build)
+├── rails-wasm/         # Source code for the `rails.wasm` module and the `@rails-tutorial/wasm` NPM package
+├── src
 │   ├── ...
-│   └── meta.md
-└── meta.md                   # Metadata for the tutorial
+│   ├── content
+│   │   └── tutorial   # Tutorial contents (.md + meta)
+│   └── templates       # Project templates
+├── ...
+├── theme.ts            # Customize the theme of the tutorial
+└── uno.config.ts       # UnoCSS config (https://unocss.dev/)
 ```
+
+## Patches
+
+Currently, we patch TutorialKit internals to fix some bugs and bring some improvements (like, Ruby syntax highlighting support). We use `npx patch-package` to generate patches and apply them on `npm install` (see the `patches/` directory).
+
+## Templates
+
+The default template (`src/templates/default`) contains the actual Node.js code to run a Rails application (`bin/rails`, `bin/rackup`, etc.) and configure PGLite databases.
+
+Other templates contain the Rails app code. Templates support inheritance, so each Rails template only contains the new and changed files compared to the parent one (and the `rails-new` template is a starting point).
+
+[ruby.wasm]: https://github.com/ruby/ruby.wasm
+[wasmify-rails]: https://github.com/palkan/wasmify-rails
+[PGlite]: https://pglite.dev/
+[TutorialKit]: https://tutorialkit.dev
