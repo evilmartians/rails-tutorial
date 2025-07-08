@@ -24,6 +24,12 @@ After completing this tutorial, you will know:
   <a href="/1-introduction/1-welcome" class="bg-red-600 !text-lg !text-white !no-underline hover:bg-red-700 font-semibold py-3 px-6 rounded-lg text-lg transform transition duration-200 hover:scale-105">Let's go!</a>
 </div>
 
+:::info
+This project is still in its early days. Please, report any [issues](https://github.com/evilmartians/rails-tutorial/issues) and provide [suggestions](https://github.com/evilmartians/rails-tutorial/discussions).
+
+Most hiccups can be resolved by reloading a page.
+:::
+
 ---
 
 Proudly built by [Evil Martians](https://evilmartians.com/) based on the [Rails Guides](https://guides.rubyonrails.org/).

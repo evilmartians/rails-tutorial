@@ -13,6 +13,10 @@ What's Next?
 
 Congratulations on building your first Rails application!
 
+:::tip
+You can continue exploring Rails in the browser on StackBlitz by using our [template](https://github.com/palkan/rails-tutorial-template).
+:::
+
 We recommend reading the original tutorial's [parts on deployment and production](https://guides.rubyonrails.org/getting_started.html#deploying-to-production) and continuing to experiment with the in-browser version to continue learning.
 
 Here are some ideas:
