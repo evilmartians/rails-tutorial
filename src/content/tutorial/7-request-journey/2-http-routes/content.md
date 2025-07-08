@@ -2,7 +2,9 @@
 type: lesson
 title: HTTP Routes
 editor: false
-terminal: false
+custom:
+  shell:
+    workdir: "/workspace/store"
 ---
 
 HTTP Routes

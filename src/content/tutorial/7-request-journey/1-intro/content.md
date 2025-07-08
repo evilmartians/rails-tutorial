@@ -1,8 +1,10 @@
 ---
 type: lesson
-title: Intro
+title: "HTTP Intro"
 editor: false
-terminal: false
+custom:
+  shell:
+    workdir: "/workspace/store"
 ---
 
 A Request's Journey Through Rails

@@ -2,7 +2,9 @@
 type: lesson
 title: Rails Routes Explained
 editor: false
-terminal: false
+custom:
+  shell:
+    workdir: "/workspace/store"
 ---
 
 Rails Routes Explained

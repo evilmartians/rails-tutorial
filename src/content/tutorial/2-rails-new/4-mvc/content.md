@@ -2,7 +2,9 @@
 type: lesson
 title: MVC Basics
 editor: false
-terminal: false
+custom:
+  shell:
+    workdir: "/workspace/store"
 ---
 
 Model-View-Controller Basics

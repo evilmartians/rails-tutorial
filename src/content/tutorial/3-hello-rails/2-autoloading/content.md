@@ -2,7 +2,9 @@
 type: lesson
 title: Autoloading in Development
 editor: false
-terminal: false
+custom:
+  shell:
+    workdir: "/workspace/store"
 ---
 
 Autoloading in Development
