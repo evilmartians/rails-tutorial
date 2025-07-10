@@ -47,6 +47,7 @@ export default async function initVM(vmopts = {}) {
     global.pglite = pglite;
 
     const authenticationPatch = await fs.readFile(new URL("./patches/authentication.rb", import.meta.url).pathname, 'utf8');
+    const appGeneratorPatch = await fs.readFile(new URL("./patches/app_generator.rb", import.meta.url).pathname, 'utf8');
 
     vm.eval(`
       Dir.chdir("${workdir}") unless "${workdir}".empty?
@@ -60,6 +61,7 @@ export default async function initVM(vmopts = {}) {
       Wasmify::ExternalCommands.register(:server, :console)
 
       ${authenticationPatch}
+      ${appGeneratorPatch}
     `)
   }
 
