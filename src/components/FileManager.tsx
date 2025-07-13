@@ -65,6 +65,7 @@ export function FileManager() {
           wasmCached.current = true;
         }
       } catch (error) {
+        console.log(error)
         // File not ready yet, continue checking
       }
     }, 1000);
@@ -76,16 +77,18 @@ export function FileManager() {
     (async () => {
       const wc = await webcontainer;
 
-      if (!wasmCached.current) {
-        const cachedWasm = await fetchCachedWasmFile();
-        if (cachedWasm) {
-          await wc.fs.writeFile(VERSIONED_RAILS_WASM_FILE_NAME, cachedWasm);
-          console.log(`Rails WASM v${RAILS_WASM_PACKAGE_VERSION} loaded from cache`);
-          wasmCached.current = true;
-        } else {
-          await cacheWasmFile(wc);
-        }
-      }
+      // FIXME: caching doesn't work in Safari. Need to figure out a different strategy.
+      //
+      // if (!wasmCached.current) {
+      //   const cachedWasm = await fetchCachedWasmFile();
+      //   if (cachedWasm) {
+      //     await wc.fs.writeFile(VERSIONED_RAILS_WASM_FILE_NAME, cachedWasm);
+      //     console.log(`Rails WASM v${RAILS_WASM_PACKAGE_VERSION} loaded from cache`);
+      //     wasmCached.current = true;
+      //   } else {
+      //     await cacheWasmFile(wc);
+      //   }
+      // }
 
       Object.entries(files).forEach(([_, fd]) => {
         const dir = fd.path.split('/').filter(Boolean).slice(-2, -1)[0];
