@@ -7,9 +7,10 @@ type ShellConfig = Partial<{
 }>;
 
 export const ShellConfigurator: React.FC = () => {
-  const boot = useStore(tutorialStore.bootStatus)
+  const boot = useStore(tutorialStore.bootStatus);
+  const storeRef = useStore(tutorialStore.ref);
+  const terminalConfig = useStore(tutorialStore.terminalConfig);
   const [state, set] = useState(0);
-  const terminalConfig = tutorialStore.terminalConfig.get()
 
   useEffect(() => {
     const unlisten = tutorialStore.terminalConfig.listen(() => {
@@ -18,19 +19,25 @@ export const ShellConfigurator: React.FC = () => {
     return unlisten
   }, [terminalConfig])
 
-  if (boot !== "booted") return;
-
+  const lesson = tutorialStore.lesson;
   const terminal = terminalConfig.panels.find(panel => panel.type === 'terminal');
-  if (!terminal || !terminal.process) return;
 
-  const conf = tutorialStore.lesson?.data?.custom?.shell as ShellConfig
-  if (conf) {
-    const { workdir } = conf;
+  useEffect(() => {
+    if (boot !== "booted") return;
 
-    if (workdir) {
-      terminal.input(`cd /home/tutorial${workdir} && clear\n`);
+    if (!lesson) return;
+
+    if (!terminal) return;
+
+    const conf = lesson?.data?.custom?.shell as ShellConfig
+    if (conf) {
+      const { workdir } = conf;
+
+      if (workdir) {
+        terminal.input(`cd /home/tutorial${workdir} && clear\n`);
+      }
     }
-  }
+  }, [boot, terminalConfig, storeRef]);
 
   return null;
 };
