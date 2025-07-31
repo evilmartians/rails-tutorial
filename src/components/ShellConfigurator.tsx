@@ -1,4 +1,5 @@
 import { useStore } from '@nanostores/react'
+import type { WebContainerProcess } from '@webcontainer/api';
 import { useEffect, useState } from 'react';
 import tutorialStore from 'tutorialkit:store';
 
@@ -6,7 +7,8 @@ type ShellConfig = Partial<{
   workdir: string
 }>;
 
-let observedProcess = false;
+let observedProcess: WebContainerProcess | undefined = undefined;
+let currWorkdir = "";
 
 export const ShellConfigurator: React.FC = () => {
   const boot = useStore(tutorialStore.bootStatus);
@@ -40,10 +42,14 @@ export const ShellConfigurator: React.FC = () => {
     const { workdir } = conf;
     if (!workdir) return;
 
+    if (currWorkdir === workdir) return;
+
+    currWorkdir = workdir;
+
     const checkProcess = () => {
-      console.log('Checking process...', terminal.process, observedProcess);
       if (terminal.process || observedProcess) {
-        if (!observedProcess) observedProcess = true;
+        if (!observedProcess) observedProcess = terminal.process;
+
         terminal.input(`cd /home/tutorial${workdir} && clear\n`);
         return true;
       }
