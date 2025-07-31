@@ -29,14 +29,33 @@ export const ShellConfigurator: React.FC = () => {
 
     if (!terminal) return;
 
-    const conf = lesson?.data?.custom?.shell as ShellConfig
-    if (conf) {
-      const { workdir } = conf;
+    const conf = lesson?.data?.custom?.shell as ShellConfig;
+    if (!conf) return;
 
-      if (workdir) {
+    const { workdir } = conf;
+    if (!workdir) return;
+
+    terminal.input(`cd /home/tutorial${workdir} && clear\n`);
+
+    const checkProcess = () => {
+      if (terminal.process) {
         terminal.input(`cd /home/tutorial${workdir} && clear\n`);
+        return true;
       }
-    }
+      return false;
+    };
+
+    // Check immediately
+    if (checkProcess()) return;
+
+    // Set up interval to wait for process
+    const interval = setInterval(() => {
+      if (checkProcess()) {
+        clearInterval(interval);
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
   }, [boot, terminalConfig, storeRef]);
 
   return null;

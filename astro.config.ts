@@ -12,10 +12,10 @@ export default defineConfig({
         TopBar: "./src/components/TopBar.astro",
         HeadTags: "./src/components/HeadTags.astro"
       },
-      defaultRoutes: "tutorial-only"
+      defaultRoutes: true
     })
   ],
   markdown: {
     remarkPlugins: [remarkRailsPathLinks],
-  },
+  }
 });

@@ -1,5 +1,6 @@
 ---
 import path from 'node:path';
+import RailsPathLinkHandler from './RailsPathLinkHandler.tsx';
 import { ShellConfigurator } from './ShellConfigurator';
 import { FileManager } from './FileManager';
 import { HelpDropdown } from './HelpDropdown';
@@ -44,5 +45,6 @@ const logoDark = path.join(import.meta.env.BASE_URL, 'logo-dark.svg');
   </div>
 </nav>
 
+<RailsPathLinkHandler client:only />
 <ShellConfigurator client:only />
 <FileManager client:only />

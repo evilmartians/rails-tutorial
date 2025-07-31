@@ -1,17 +1,26 @@
-diff --git a/node_modules/@tutorialkit/astro/package.json b/node_modules/@tutorialkit/astro/package.json
-index 666f061..e477821 100644
---- a/node_modules/@tutorialkit/astro/package.json
-+++ b/node_modules/@tutorialkit/astro/package.json
-@@ -17,10 +17,12 @@
-     ".": "./dist/index.js",
-     "./types": "./types.d.ts",
-     "./default-theme.css": "./dist/default/styles/variables.css",
-+    "./default/styles/base.css": "./dist/default/styles/base.css",
-     "./default/pages/index.astro": "./dist/default/pages/index.astro",
-     "./default/pages/[...slug].astro": "./dist/default/pages/[...slug].astro",
-     "./default/components/TopBar.astro": "./dist/default/components/TopBar.astro",
-     "./default/components/HeadTags.astro": "./dist/default/components/HeadTags.astro",
-+    "./default/components/ThemeSwitch.tsx": "./dist/default/components/ThemeSwitch.tsx",
-     "./package.json": "./package.json"
-   },
-   "files": [
+diff --git a/node_modules/@tutorialkit/astro/dist/default/components/TutorialContent.astro b/node_modules/@tutorialkit/astro/dist/default/components/TutorialContent.astro
+index 8c77b9f..10deb01 100644
+--- a/node_modules/@tutorialkit/astro/dist/default/components/TutorialContent.astro
++++ b/node_modules/@tutorialkit/astro/dist/default/components/TutorialContent.astro
+@@ -39,10 +39,15 @@ const { Markdown, editPageLink, prev, next } = lesson;
+     </div>
+   </div>
+ 
+-  <a
+-    class="inline-block mt-auto font-size-3.5 underline text-tk-elements-link-secondaryColor hover:text-tk-elements-link-secondaryColorHover"
+-    href="https://webcontainers.io/"
+-  >
+-    {lesson.data.i18n!.webcontainerLinkText}
+-  </a>
++  <div class="inline-block mt-auto font-size-3.5">
++    Proudly built by <a
++      class="underline text-tk-elements-link-secondaryColor hover:text-tk-elements-link-secondaryColorHover"
++      href="https://evilmartians.com/"
++      target="_blank"
++    >Evil Martians</a> based on the <a
++      class="underline text-tk-elements-link-secondaryColor hover:text-tk-elements-link-secondaryColorHover"
++      href="https://guides.rubyonrails.org/"
++      target="_blank"
++    >Rails Guides</a>.
++  </div>
+ </div>
