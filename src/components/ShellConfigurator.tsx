@@ -10,6 +10,7 @@ export const ShellConfigurator: React.FC = () => {
   const boot = useStore(tutorialStore.bootStatus);
   const storeRef = useStore(tutorialStore.ref);
   const terminalConfig = useStore(tutorialStore.terminalConfig);
+  const lessonLoaded = useStore(tutorialStore.lessonFullyLoaded);
   const [state, set] = useState(0);
 
   useEffect(() => {
@@ -24,6 +25,8 @@ export const ShellConfigurator: React.FC = () => {
 
   useEffect(() => {
     if (boot !== "booted") return;
+
+    if (!lessonLoaded) return;
 
     if (!lesson) return;
 
@@ -56,7 +59,7 @@ export const ShellConfigurator: React.FC = () => {
     }, 100);
 
     return () => clearInterval(interval);
-  }, [boot, terminalConfig, storeRef]);
+  }, [boot, terminalConfig, storeRef, lessonLoaded]);
 
   return null;
 };

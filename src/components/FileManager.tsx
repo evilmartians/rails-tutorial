@@ -6,6 +6,7 @@ import type { WebContainer } from '@webcontainer/api';
 import { RAILS_WASM_PACKAGE_VERSION } from '../templates/default/lib/constants';
 
 export function FileManager() {
+  const lessonLoaded = useStore(tutorialStore.lessonFullyLoaded);
   const files = useStore(tutorialStore.files);
   const processedFiles = useRef(new Set<string>());
   const wasmCached = useRef(false);
@@ -72,6 +73,7 @@ export function FileManager() {
   }
 
   useEffect(() => {
+    if (!lessonLoaded) return;
     if (!files) return;
 
     (async () => {
@@ -105,7 +107,7 @@ export function FileManager() {
         cachingInterval.current = null;
       }
     };
-  }, [files]);
+  }, [lessonLoaded, files]);
 
   return null;
 }
