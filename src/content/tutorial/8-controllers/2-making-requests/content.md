@@ -1,6 +1,6 @@
 ---
 type: lesson
-title: Controllers & Actions
+title: Making Requests
 focus: /workspace/store/app/controllers/products_controller.rb
 previews:
   - 3000
