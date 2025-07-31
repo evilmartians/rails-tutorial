@@ -6,6 +6,8 @@ type ShellConfig = Partial<{
   workdir: string
 }>;
 
+let observedProcess = false;
+
 export const ShellConfigurator: React.FC = () => {
   const boot = useStore(tutorialStore.bootStatus);
   const storeRef = useStore(tutorialStore.ref);
@@ -38,10 +40,10 @@ export const ShellConfigurator: React.FC = () => {
     const { workdir } = conf;
     if (!workdir) return;
 
-    terminal.input(`cd /home/tutorial${workdir} && clear\n`);
-
     const checkProcess = () => {
-      if (terminal.process) {
+      console.log('Checking process...', terminal.process, observedProcess);
+      if (terminal.process || observedProcess) {
+        if (!observedProcess) observedProcess = true;
         terminal.input(`cd /home/tutorial${workdir} && clear\n`);
         return true;
       }
