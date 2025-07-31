@@ -2,6 +2,7 @@
 import path from 'node:path';
 import { ShellConfigurator } from './ShellConfigurator';
 import { FileManager } from './FileManager';
+import { HelpDropdown } from './HelpDropdown';
 import GitHubLink from './GitHubLink.astro';
 
 const logo = path.join(import.meta.env.BASE_URL, 'logo.svg');
@@ -23,6 +24,9 @@ const logoDark = path.join(import.meta.env.BASE_URL, 'logo-dark.svg');
     </a>
   </div>
 
+  <div class="mr-2">
+    <HelpDropdown client:only />
+  </div>
   <div class="mr-2">
     <slot name="download-button" />
   </div>
