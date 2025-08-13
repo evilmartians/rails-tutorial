@@ -1,8 +1,21 @@
+---
+const plausibleDomain = import.meta.env.PLAUSIBLE_DOMAIN;
+const plausibleScriptURL = import.meta.env.PLAUSIBLE_SCRIPT_URL || 'https://plausible.io/js/script.js';
+---
+
 <slot name="title" />
 <slot name="links" />
 <slot name="meta" />
 
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+
+{plausibleDomain && (
+  <script
+    defer
+    data-domain={plausibleDomain}
+    src={plausibleScriptURL}
+  ></script>
+)}
 
 <style>
   /* Rails path links styling */
