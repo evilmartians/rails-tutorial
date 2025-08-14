@@ -47,7 +47,7 @@ export function HelpDropdown() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+        <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-60">
           <div className="p-4">
             <div className="mb-4">
               <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
