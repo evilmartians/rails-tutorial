@@ -7,6 +7,10 @@ This is a source code of the in-browser Rails Tutorial built with [ruby.wasm][],
 
 The tutorial contents are based on the official [Getting Started with Rails](https://guides.rubyonrails.org/getting_started.html) guide.
 
+<br/>
+
+<img src="https://cdn.evilmartians.com/badges/logo-no-label.svg" alt="Evil Martians logo" width="22" height="16" /> This project is built by <b><a href="https://evilmartians.com/">Evil Martians</a></b>, an American design and engineering consultancy for <b>developer tools, AI, and cybersecurity startups</b>.
+
 ## Getting Started
 
 Make sure you have all dependencies installed and started the dev server:
